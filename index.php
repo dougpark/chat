@@ -2,22 +2,24 @@
 session_start();
 include('./header.php');
 ?>
-<title>phpzag.com : Demo Build Live Chat System with Ajax, PHP & MySQL</title>
+<title>Chat</title>
+
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link href="css/style.css" rel="stylesheet" id="bootstrap-css">
 <script src="js/chat.js"></script>
+
 <style>
 .modal-dialog {
     width: 400px;
     margin: 30px auto;	
 }
 </style>
-<?php include('container.php');?>
-<div class="container">		
-	<h1>Example: Build Live Chat System with Ajax, PHP & MySQL</h1>		
-	<br>		
+
+<?php //xxx include('container.php');?>
+
+<div class="container">				
 	<?php if(isset($_SESSION['userid']) && $_SESSION['userid']) { ?> 	
-		<div class="chat">	
+		<div class="chat2">	
 			<div id="frame">		
 				<div id="sidepanel">
 					<div id="profile">
@@ -117,12 +119,8 @@ include('./header.php');
 	<?php } else { ?>
 		<br>
 		<br>
-		<strong><a href="login.php"><h3>Login To Access Chat System</h3></a></strong>		
+		<strong><a href="login.php"><h3>Chat Login</h3></a></strong>		
 	<?php } ?>
-	<br>
-	<br>	
-	<div style="margin:50px 0px 0px 0px;">
-		<a class="btn btn-default read-more" style="background:#3399ff;color:white" href="http://www.phpzag.com/build-live-chat-system-with-ajax-php-mysql/">Back to Tutorial</a>		
-	</div>	
+
 </div>	
 <?php include('footer.php');?>

@@ -36,7 +36,7 @@ ALTER TABLE `chat_users`
 --
 
 CREATE TABLE `chat` (
-  `chatid` int(11) NOT NULL,
+  `chatid` int(11) NOT NULL ,
   `sender_userid` int(11) NOT NULL,
   `reciever_userid` int(11) NOT NULL,
   `message` text NOT NULL,
@@ -49,6 +49,9 @@ CREATE TABLE `chat` (
 --
 ALTER TABLE `chat`
   ADD PRIMARY KEY (`chatid`);
+
+  ALTER TABLE `chat`
+CHANGE COLUMN `chatid` `chatid` INT(11) NOT NULL AUTO_INCREMENT FIRST;
   
   
 
@@ -69,5 +72,8 @@ CREATE TABLE `chat_login_details` (
 --
 ALTER TABLE `chat_login_details`
   ADD PRIMARY KEY (`id`);
+
+  ALTER TABLE `chat_login_details`
+CHANGE COLUMN `id` `id` INT(11) NOT NULL AUTO_INCREMENT FIRST;
   
   

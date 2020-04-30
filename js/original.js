@@ -44,32 +44,12 @@ $(document).ready(function () {
 		showUserChat(to_user_id);
 		$(".chatMessage").attr('id', 'chatMessage' + to_user_id);
 		$(".chatButton").attr('id', 'chatButton' + to_user_id);
-		//console.log('i just selected a new contact');
 	});
-
-	//xxx listen for return key press
-	$(document).keydown(function (event) {
-		//console.log(event);
-		if (event.which == 13) {
-			event.preventDefault();
-			var to_user_id = event.target.id;
-			//console.log('to= ' + to_user_id);
-			to_user_id = to_user_id.replace(/chatMessage/g, "");
-			//console.log("I just hit return " + to_user_id);
-			sendMessage(to_user_id);
-		}
-
-	});
-
 	$(document).on("click", '.submit', function (event) {
 		var to_user_id = $(this).attr('id');
-		//console.log("to_user_id= " + to_user_id);
-
 		to_user_id = to_user_id.replace(/chatButton/g, "");
-
 		sendMessage(to_user_id);
 	});
-
 	$(document).on('focus', '.message-input', function () {
 		var is_type = 'yes';
 		$.ajax({
@@ -122,7 +102,6 @@ function updateUserList() {
 
 function sendMessage(to_user_id) {
 	message = $(".message-input input").val();
-	//console.log('message input= ' + message);
 	$('.message-input input').val('');
 	if ($.trim(message) == '') {
 		return false;
@@ -137,18 +116,13 @@ function sendMessage(to_user_id) {
 		},
 		dataType: "json",
 		success: function (response) {
-			$('#conversation').html(response.conversation);
-			scrollSmoothToBottom('conversation');
+			var resp = $.parseJSON(response);
+			$('#conversation').html(resp.conversation);
+			$(".messages").animate({
+				scrollTop: $('.messages').height()
+			}, "fast");
 		}
 	});
-}
-
-//dnp https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
-function scrollSmoothToBottom(id) {
-	var div = document.getElementById(id);
-	$('#' + id).animate({
-		scrollTop: div.scrollHeight - div.clientHeight
-	}, 500);
 }
 
 function showUserChat(to_user_id) {
@@ -181,7 +155,6 @@ function updateUserChat() {
 			dataType: "json",
 			success: function (response) {
 				$('#conversation').html(response.conversation);
-				scrollSmoothToBottom('conversation');
 			}
 		});
 	});

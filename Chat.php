@@ -75,15 +75,27 @@ class Chat{
 			WHERE userid = '".$userId."'";			
 		mysqli_query($this->dbConnect, $sqlUserUpdate);		
 	}
+
 	public function insertChat($reciever_userid, $user_id, $chat_message) {		
 		$sqlInsert = "
 			INSERT INTO ".$this->chatTable." 
 			(reciever_userid, sender_userid, message, status) 
 			VALUES ('".$reciever_userid."', '".$user_id."', '".$chat_message."', '1')";
 		$result = mysqli_query($this->dbConnect, $sqlInsert);
+		//error_log('inserted into sql chatTable, reciever_userid='.$sqlInsert);
+		//error_log('this->dbConnect= '. $this->dbConnect);
+		// error_log('result= '.$result);
+		// error_log('sql error = ' .mysqli_connect_error());
+		// error_log('Error in query: '. mysqli_error($this->dbConnect));
+
 		if(!$result){
+			//error_log('bad result '. mysqli_error($this->dbConnect));
+			//error_log('sql error = ' .mysqli_connect_error());
+			//error_log('Error in query: '. mysqli_error($this->dbConnect));
+
 			return ('Error in query: '. mysqli_error($this->dbConnect));
 		} else {
+			//error_log('good result');
 			$conversation = $this->getUserChat($user_id, $reciever_userid);
 			$data = array(
 				"conversation" => $conversation			
@@ -184,8 +196,10 @@ class Chat{
 	}		
 	public function insertUserLoginDetails($userId) {		
 		$sqlInsert = "
-			INSERT INTO ".$this->chatLoginDetailsTable."(userid) 
+			INSERT INTO ".$this->chatLoginDetailsTable." (userid) 
 			VALUES ('".$userId."')";
+			error_log('insert sql= '.$sqlInsert);
+
 		mysqli_query($this->dbConnect, $sqlInsert);
 		$lastInsertId = mysqli_insert_id($this->dbConnect);
         return $lastInsertId;		

@@ -10,6 +10,12 @@ if($_POST['action'] == 'update_user_list') {
 	echo json_encode($data);	
 }
 if($_POST['action'] == 'insert_chat') {
+	// error_log('chat_action insert_chat received');
+	// error_log('to_user_id= ' . $_POST['to_user_id']);
+	// error_log('userid= ' . $_SESSION['userid']);
+	// error_log('message= ' . $_POST['chat_message']);
+	// error_log('about to call insertChat');
+
 	$chat->insertChat($_POST['to_user_id'], $_SESSION['userid'], $_POST['chat_message']);
 }
 if($_POST['action'] == 'show_chat') {

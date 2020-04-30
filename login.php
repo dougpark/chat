@@ -10,7 +10,10 @@ if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
 		$_SESSION['username'] = $user[0]['username'];
 		$_SESSION['userid'] = $user[0]['userid'];
 		$chat->updateUserOnline($user[0]['userid'], 1);
+		
 		$lastInsertId = $chat->insertUserLoginDetails($user[0]['userid']);
+		error_log('lastInsertId= '.$lastInsertId);
+
 		$_SESSION['login_details_id'] = $lastInsertId;
 		header("Location:index.php");
 	} else {
@@ -19,10 +22,10 @@ if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
 }
 
 ?>
-<title>phpzag.com : Demo Push Notification System with PHP & MySQL</title>
-<?php include('../container.php');?>
+<title>Chat</title>
+<?php include('./container.php');?>
 <div class="container">		
-	<h2>Example: Build Live Chat System with Ajax, PHP & MySQL</h1>		
+	<h2>Chat</h1>		
 	<div class="row">
 		<div class="col-sm-4">
 			<h4>Chat Login:</h4>		
@@ -43,15 +46,15 @@ if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
 				<button type="submit" name="login" class="btn btn-info">Login</button>
 			</form>
 			<br>
-			<p><b>User</b> : adam<br><b>Password</b> : 123</p>
-			<p><b>User</b> : rose<br><b>Password</b> : 123</p>
-			<p><b>User</b> : smith<br><b>Password</b>: 123</p>
-			<p><b>User</b> : merry<br><b>Password</b>: 123</p>
+			<p><b>User</b> : Adam<br><b>Password</b> : 123</p>
+			<p><b>User</b> : Rose<br><b>Password</b> : 123</p>
+			<p><b>User</b> : Smith<br><b>Password</b>: 123</p>
+			<p><b>User</b> : March<br><b>Password</b>: 123</p>
 		</div>
 		
 	</div>
 </div>	
-<?php include('../footer.php');?>
+<?php include('./footer.php');?>
 
 
 
