@@ -4,24 +4,19 @@ include('./header.php');
 ?>
 <title>Chat</title>
 
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
-<link href="css/style.css" rel="stylesheet" id="bootstrap-css">
 <script src="js/chat.js"></script>
 
-<style>
-.modal-dialog {
-    width: 400px;
-    margin: 30px auto;	
-}
-</style>
+</head>
 
 <?php //xxx include('container.php');?>
 
-<div class="container">				
+<div class="container" style="min-height:500px;">		
+	<br>		
 	<?php if(isset($_SESSION['userid']) && $_SESSION['userid']) { ?> 	
-		<div class="chat2">	
-			<div id="frame">		
-				<div id="sidepanel">
+		<div class="xrow" xclass="xxchat">	
+			<div class="frame row" id="xframe">	
+				
+				<div class="sidepanel col-md-2" id="xsidepanel" >
 					<div id="profile">
 					<?php
 					include ('Chat.php');
@@ -84,8 +79,9 @@ include('./header.php');
 						<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
 						<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>					
 					</div>
-				</div>			
-				<div class="content" id="content"> 
+				</div>
+					
+				<div class="content" id="xcontent"> 
 					<div class="contact-profile" id="userSection">	
 					<?php
 					$userDetails = $chat->getUserDetails($currentSession);
@@ -123,4 +119,4 @@ include('./header.php');
 	<?php } ?>
 
 </div>	
-<?php include('footer.php');?>
+<?php include('./footer.php');?>
