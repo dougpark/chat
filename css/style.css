@@ -25,7 +25,11 @@
   height: 92vh;
   min-height: 300px;
   max-height: 600px;
-  background: #E6EAEA;
+  xbackground: #E6EAEA;
+}
+
+.content {
+  background: #a3a3a3;
 }
 
 @media screen and (max-width: 360px) {
@@ -38,8 +42,8 @@
 .frame .sidepanel {
   float: left;
   min-width: 280px;
-  max-width: 340px;
-  width: 40%;
+  max-width: 280px;
+  xwidth: 40%;
   height: 100%;
   background: #2c3e50;
   color: #f5f5f5;
@@ -50,8 +54,8 @@
 
 @media screen and (max-width: 735px) {
   .frame .sidepanel {
-    width: 58px;
-    min-width: 58px;
+    width: 100%;
+    min-width: 100%;
   }
 }
 
@@ -59,8 +63,8 @@
 /* sidepanel profile */
 
 .frame .sidepanel #profile {
-  width: 80%;
-  margin: 25px auto;
+  xwidth: 80%;
+  xmargin: 25px auto;
 }
 
 @media screen and (max-width: 735px) {
@@ -172,7 +176,7 @@
   position: absolute;
   opacity: 0;
   visibility: hidden;
-  width: 150px;
+  xwidth: 150px;
   margin: 70px 0 0 0;
   border-radius: 6px;
   z-index: 99;
@@ -206,7 +210,7 @@
 .frame .sidepanel #profile .wrap #status-options:before {
   content: '';
   position: absolute;
-  width: 0;
+  xwidth: 0;
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
@@ -350,11 +354,12 @@
   border-top: 1px solid #32465a;
   border-bottom: 1px solid #32465a;
   font-weight: 300;
+
 }
 
 @media screen and (max-width: 735px) {
   .frame .sidepanel #search {
-    display: none;
+    xdisplay: none;
   }
 }
 
@@ -366,9 +371,11 @@
 .frame .sidepanel #search input {
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
   padding: 10px 0 10px 46px;
-  width: calc(100% - 25px);
+  width: 98%;
+  x(100% - 25px);
   border: none;
-  background: #32465a;
+  xbackground: #32465a;
+  background: #959595;
   color: #f5f5f5;
 }
 
@@ -428,14 +435,14 @@
 
 .frame .sidepanel #contacts ul li.contact {
   position: relative;
-  padding: 10px 0 15px 0;
+  padding: 10px 0 10px 0;
   font-size: 0.9em;
   cursor: pointer;
 }
 
 @media screen and (max-width: 735px) {
   .frame .sidepanel #contacts ul li.contact {
-    padding: 6px 0 46px 8px;
+    padding: 10px 0 15px 0;
   }
 }
 
@@ -453,7 +460,7 @@
 }
 
 .frame .sidepanel #contacts ul li.contact .wrap {
-  width: 88%;
+  width: 100%;
   margin: 0 auto;
   position: relative;
 }
@@ -512,7 +519,7 @@
 
 @media screen and (max-width: 735px) {
   .frame .sidepanel #contacts ul li.contact .wrap .meta {
-    display: none;
+    xdisplay: none;
   }
 }
 
@@ -603,7 +610,7 @@
 
 @media screen and (max-width: 735px) {
   .frame .sidepanel #bottom-bar button span {
-    display: none;
+    xdisplay: none;
   }
 
 }
@@ -645,25 +652,25 @@
 
 /* profile section across the top */
 
-.frame .content .contact-profile {
+.contact-profile {
   width: 100%;
   height: 60px;
   line-height: 50px;
-  background: #f5f5f5;
+  background: #656565;
 }
 
-.frame .content .contact-profile img {
+.contact-profile img {
   width: 40px;
   border-radius: 50%;
   float: left;
   margin: 9px 12px 0 9px;
 }
 
-.frame .content .contact-profile p {
+.contact-profile p {
   float: left;
 }
 
-.frame .content .contact-profile .social-media {
+.contact-profile .social-media {
   float: right;
 }
 

@@ -17,7 +17,8 @@ class Chat{
                 $this->dbConnect = $conn;
             }
         }
-    }
+	}
+	
 	private function getData($sqlQuery) {
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		if(!$result){
@@ -29,6 +30,7 @@ class Chat{
 		}
 		return $data;
 	}
+
 	private function getNumRows($sqlQuery) {
 		$result = mysqli_query($this->dbConnect, $sqlQuery);
 		if(!$result){
@@ -37,6 +39,7 @@ class Chat{
 		$numRows = mysqli_num_rows($result);
 		return $numRows;
 	}
+
 	public function loginUsers($username, $password){
 		$sqlQuery = "
 			SELECT userid, username 
@@ -44,18 +47,21 @@ class Chat{
 			WHERE username='".$username."' AND password='".$password."'";	
         return  $this->getData($sqlQuery);
 	}		
+
 	public function chatUsers($userid){
 		$sqlQuery = "
 			SELECT * FROM ".$this->chatUsersTable." 
 			WHERE userid != '$userid'";
 		return  $this->getData($sqlQuery);
 	}
+
 	public function getUserDetails($userid){
 		$sqlQuery = "
 			SELECT * FROM ".$this->chatUsersTable." 
 			WHERE userid = '$userid'";
 		return  $this->getData($sqlQuery);
 	}
+
 	public function getUserAvatar($userid){
 		$sqlQuery = "
 			SELECT avatar 
@@ -103,6 +109,37 @@ class Chat{
 			echo json_encode($data);	
 		}
 	}
+
+	// dnp
+	public function getUsersLastConversationDate($from_user_id, $to_user_id) {
+		$sqlQuery = "
+					SELECT * FROM ".$this->chatTable." 
+					WHERE (sender_userid = '".$from_user_id."' 
+					AND reciever_userid = '".$to_user_id."') 
+					OR (sender_userid = '".$to_user_id."' 
+					AND reciever_userid = '".$from_user_id."') 
+					ORDER BY timestamp DESC LIMIT 1";
+				$result =  $this->getData($sqlQuery);
+				foreach($result as $row) {
+					return $row['timestamp'];
+				}
+	}
+
+	// dnp
+	public function getUsersLastMessage($from_user_id, $to_user_id) {
+		$sqlQuery = "
+					SELECT * FROM ".$this->chatTable." 
+					WHERE (sender_userid = '".$from_user_id."' 
+					AND reciever_userid = '".$to_user_id."') 
+					OR (sender_userid = '".$to_user_id."' 
+					AND reciever_userid = '".$from_user_id."') 
+					ORDER BY timestamp DESC LIMIT 1";
+				$result =  $this->getData($sqlQuery);
+				foreach($result as $row) {
+					return $row['message'];
+				}
+	}
+
 	public function getUserChat($from_user_id, $to_user_id) {
 		$fromUserAvatar = $this->getUserAvatar($from_user_id);	
 		$toUserAvatar = $this->getUserAvatar($to_user_id);			
@@ -130,6 +167,7 @@ class Chat{
 		$conversation .= '</ul>';
 		return $conversation;
 	}
+
 	public function showUserChat($from_user_id, $to_user_id) {		
 		$userDetails = $this->getUserDetails($to_user_id);
 		$toUserAvatar = '';
@@ -145,12 +183,14 @@ class Chat{
 		}		
 		// get user conversation
 		$conversation = $this->getUserChat($from_user_id, $to_user_id);	
+
 		// update chat user read status		
 		$sqlUpdate = "
 			UPDATE ".$this->chatTable." 
 			SET status = '0' 
 			WHERE sender_userid = '".$to_user_id."' AND reciever_userid = '".$from_user_id."' AND status = '1'";
-		mysqli_query($this->dbConnect, $sqlUpdate);		
+		mysqli_query($this->dbConnect, $sqlUpdate);	
+
 		// update users current chat session
 		$sqlUserUpdate = "
 			UPDATE ".$this->chatUsersTable." 
