@@ -288,12 +288,10 @@ session_start();
 
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <span class="fas fa-sync"></span>
-                            Refresh
+                            <span class="fas fa-power-off"></span>
+                            Log Off
                         </a>
                     </li>
-
-                    <li class="nav-item"><a class="nav-link" href="#"> Menu item </a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown"> Status </a>
                         <ul class="dropdown-menu dropdown-menu-right">
@@ -306,8 +304,7 @@ session_start();
                             <li><a class="dropdown-item" href="#"> <span class="far fa-clock"></span>
                                     Away</a></li>
                             <li class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"> <span class="fas fa-power-off"></span>
-                                    Sign Out</a></li>
+
                         </ul>
                     </li>
 
@@ -449,114 +446,12 @@ echo '<ul class="contacts">';
 
                         <!-- Example bootstrap theme -->
                         <!-- https://www.codeply.com/go/bp/6mdOs5FvKU -->
-                        <ul class="chat">
 
+                        <!-- all conversation messages are generated and html formated from the php code -->
                         <div id="conversation"> </div>
 
-                            <li class="left clearfix">
-                                <span class="chat-img float-left">
-                                    <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar"
-                                        class="rounded-circle">
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <strong class="primary-font">Jack Sparrow</strong> <small
-                                            class="float-right text-muted">
-                                            <span class="far fa-clock"></span> 12 mins ago</small>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                                        ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="right clearfix"><span class="chat-img float-right">
-                                    <img src="http://placehold.it/50/FA6F57/fff&amp;text=ME" alt="User Avatar"
-                                        class="rounded-circle">
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted"><span class="far fa-clock"></span> 13 mins
-                                            ago</small>
-                                        <strong class="float-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p class="float-right">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                                        ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="left clearfix"><span class="chat-img float-left">
-                                    <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar"
-                                        class="rounded-circle">
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <strong class="primary-font">Jack Sparrow</strong> <small
-                                            class="float-right text-muted">
-                                            <span class="far fa-clock"></span> 14 mins ago</small>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                                        ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="right clearfix"><span class="chat-img float-right">
-                                    <img src="http://placehold.it/50/FA6F57/fff&amp;text=ME" alt="User Avatar"
-                                        class="rounded-circle">
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted"><span class="far fa-clock"></span> 13 mins
-                                            ago</small>
-                                        <strong class="float-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                                        ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="left clearfix"><span class="chat-img float-left">
-                                    <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar"
-                                        class="rounded-circle">
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <strong class="primary-font">Jack Sparrow</strong> <small
-                                            class="float-right text-muted">
-                                            <span class="far fa-clock"></span> 14 mins ago</small>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                                        ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                            <li class="right clearfix"><span class="chat-img float-right">
-                                    <img src="http://placehold.it/50/FA6F57/fff&amp;text=ME" alt="User Avatar"
-                                        class="rounded-circle">
-                                </span>
-                                <div class="chat-body clearfix">
-                                    <div class="header">
-                                        <small class=" text-muted"><span class="far fa-clock"></span> 13 mins
-                                            ago</small>
-                                        <strong class="float-right primary-font">Bhaumik Patel</strong>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum
-                                        ornare
-                                        dolor, quis ullamcorper ligula sodales.
-                                    </p>
-                                </div>
-                            </li>
-                        </ul>
+
+
                     </div>
 
 
