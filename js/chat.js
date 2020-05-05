@@ -37,6 +37,8 @@ $(document).ready(function () {
 		};
 		$("#status-options").removeClass("active");
 	});
+
+	// select a contact
 	$(document).on('click', '.contact', function () {
 		$('.contact').removeClass('active');
 		$(this).addClass('active');
@@ -44,7 +46,7 @@ $(document).ready(function () {
 		showUserChat(to_user_id);
 		$(".chatMessage").attr('id', 'chatMessage' + to_user_id);
 		$(".chatButton").attr('id', 'chatButton' + to_user_id);
-		//console.log('i just selected a new contact');
+		console.log('i just selected a new contact');
 	});
 
 	//xxx listen for return key press
@@ -151,6 +153,7 @@ function scrollSmoothToBottom(id) {
 	}, 500);
 }
 
+// called when select a contact to show the message with that contact
 function showUserChat(to_user_id) {
 	$.ajax({
 		url: "chat_action.php",
@@ -164,6 +167,8 @@ function showUserChat(to_user_id) {
 			$('#userSection').html(response.userSection);
 			$('#conversation').html(response.conversation);
 			$('#unread_' + to_user_id).html('');
+			console.log(response.userSection);
+			console.log(response.conversation);
 		}
 	});
 }

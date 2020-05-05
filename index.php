@@ -351,7 +351,7 @@ include 'Chat.php';
                             <div class="p-1 align-middle float-right"> <h3><?php echo $loggedUserName; ?>
                             </div>
                             <div>
-                             <?php echo '<img id="profile-img" src="userpics/' . $userPic . '" class="online px-0 align-middle float-right" alt="" style="width: 25%">'; ?>
+                             <?php echo '<img id="profile-img" src="userpics/' . $userPic . '" class="online px-0 align-middle float-right rounded-circle" alt="" style="width: 25%">'; ?>
                              </h3>
                             </div>
                         </button>
@@ -378,7 +378,7 @@ echo '<ul class="contacts">';
 
         //$lastActivity = $chat->getUserLastActivity($user['userid']);
 
-        echo '<li id="' . $user['userid'] . '" class=" left clearfix ' . $activeUser . '" data-touserid="' . $user['userid'] . '" data-tousername="' . $user['username'] . '">';
+        echo '<li id="' . $user['userid'] . '" class="left clearfix contact ' . $activeUser . '" data-touserid="' . $user['userid'] . '" data-tousername="' . $user['username'] . '">';
         echo ' <button type="button" data-dismiss="modal" class="text-left btn-block"';
         echo ' style="padding: 0; border: none; background: none;">';
 
@@ -439,9 +439,9 @@ echo '<ul class="contacts">';
                 <div class="col-sm-8 p-0 dnp-bg-screen ">
 
                     <!-- Header area -->
-                    <div class="col-lg-12 dnp-bg-screen border board-bottom-1 pl-5 pt-3" style=" height:50px; ">
+                    <div class="col-lg-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
+                        <div id="userSection"  > </div>
 
-                        <span class="fas fa-comment"></span> Messages
                     </div>
 
                     <!-- Chat area -->
@@ -450,6 +450,9 @@ echo '<ul class="contacts">';
                         <!-- Example bootstrap theme -->
                         <!-- https://www.codeply.com/go/bp/6mdOs5FvKU -->
                         <ul class="chat">
+
+                        <div id="conversation"> </div>
+
                             <li class="left clearfix">
                                 <span class="chat-img float-left">
                                     <img src="http://placehold.it/50/55C1E7/fff&amp;text=U" alt="User Avatar"
