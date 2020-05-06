@@ -1,6 +1,8 @@
 $(document).ready(function () {
 	// load first page
+	//$('#showContacts')[0].click();
 	updateUserChat();
+	console.log('document loaded')
 
 	// check for new users every 6 seconds
 	setInterval(function () {
@@ -69,16 +71,22 @@ $(document).ready(function () {
 	$(".chatMessageButton").click(function () {
 		var to_user_id = $(this).attr('id');
 		to_user_id = to_user_id.replace(/chatMessageButton/g, "");
+		//e.preventDefault();
+		//e.stopPropagation();
+		$('.chatMessage').focus();
 		sendMessage(to_user_id);
+		return false;
 	});
 
-	// dnp look for Enter key on button
-	$('.chatMessageButton').keyup(function (e) {
+	//dnp look for Enter key on button
+	$('.chatMessage').keyup(function (e) {
 		if (e.which == 13) {
-			e.preventDefault();
-			e.stopPropagation();
+			//e.preventDefault();
+			//e.stopPropagation();
 			$(this).blur();
 			$('.chatMessageButton').focus().click();
+			$('.chatMessage').focus();
+			return false;
 		}
 	});
 
@@ -119,7 +127,7 @@ $(document).ready(function () {
 				action: 'update_typing_status'
 			},
 			success: function () {
-				
+
 			}
 		});
 	});
@@ -135,7 +143,7 @@ $(document).ready(function () {
 				action: 'update_typing_status'
 			},
 			success: function () {
-				
+
 			}
 		});
 	});
@@ -212,7 +220,7 @@ function sendMessage(to_user_id) {
 		},
 		dataType: "json",
 		success: function (response) {
-			$('#conversation').html(response.conversation);
+			$('#conversationSection').html(response.conversation);
 			scrollPageToBottom();
 
 		}
@@ -249,7 +257,7 @@ function showUserChat(to_user_id) {
 			// user info part
 			$('#userSection').html(response.userSection);
 			// message chat conversation part
-			$('#conversation').html(response.conversation);
+			$('#conversationSection').html(response.conversation);
 			// reset unread indicator
 			$('#unread_' + to_user_id).html('');
 			//console.log(response.userSection);
@@ -270,7 +278,7 @@ function updateUserChat() {
 			},
 			dataType: "json",
 			success: function (response) {
-				$('#conversation').html(response.conversation);
+				$('#conversationSection').html(response.conversation);
 				scrollPageToBottom();
 			}
 		});
