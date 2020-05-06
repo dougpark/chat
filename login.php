@@ -1,39 +1,40 @@
-<?php 
+<?php
 SESSION_START();
-include('./header.php');
+include './header.php';
+
 $loginError = '';
 if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
-	include ('Chat.php');
-	$chat = new Chat();
-	$user = $chat->loginUsers($_POST['username'], $_POST['pwd']);	
-	if(!empty($user)) {
-		$_SESSION['username'] = $user[0]['username'];
-		$_SESSION['userid'] = $user[0]['userid'];
-		$chat->updateUserOnline($user[0]['userid'], 1);
-		
-		$lastInsertId = $chat->insertUserLoginDetails($user[0]['userid']);
-		error_log('lastInsertId= '.$lastInsertId);
+    include 'Chat.php';
+    $chat = new Chat();
+    $user = $chat->loginUsers($_POST['username'], $_POST['pwd']);
+    if (!empty($user)) {
+        $_SESSION['username'] = $user[0]['username'];
+        $_SESSION['userid'] = $user[0]['userid'];
+        $chat->updateUserOnline($user[0]['userid'], 1);
 
-		$_SESSION['login_details_id'] = $lastInsertId;
-		header("Location:index.php");
-	} else {
-		$loginError = "Invalid username or password!";
-	}
+        $lastInsertId = $chat->insertUserLoginDetails($user[0]['userid']);
+        //error_log('lastInsertId= ' . $lastInsertId);
+
+        $_SESSION['login_details_id'] = $lastInsertId;
+        header("Location:index.php");
+    } else {
+        $loginError = "Invalid username or password!";
+    }
 }
 
 ?>
 <title>Chat</title>
-<?php include('./container.php');?>
-<div class="container">		
-	<h2>Chat</h1>		
+<?php //include('./container.php');?>
+<div class="container">
+	<h2 class="align-center">Chat</h2>
 	<div class="row">
 		<div class="col-sm-4">
-			<h4>Chat Login:</h4>		
+			<h4>Login:</h4>
 			<form method="post">
 				<div class="form-group">
-				<?php if ($loginError ) { ?>
+				<?php if ($loginError) {?>
 					<div class="alert alert-warning"><?php echo $loginError; ?></div>
-				<?php } ?>
+				<?php }?>
 				</div>
 				<div class="form-group">
 					<label for="username">User:</label>
@@ -42,8 +43,8 @@ if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
 				<div class="form-group">
 					<label for="pwd">Password:</label>
 					<input type="password" class="form-control" name="pwd" required>
-				</div>  
-				<button type="submit" name="login" class="btn btn-info">Login</button>
+				</div>
+				<button type="submit" name="login" class="btn btn-success">Login</button>
 			</form>
 			<br>
 			<p><b>User</b> : Adam<br><b>Password</b> : 123</p>
@@ -51,10 +52,10 @@ if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
 			<p><b>User</b> : Smith<br><b>Password</b>: 123</p>
 			<p><b>User</b> : March<br><b>Password</b>: 123</p>
 		</div>
-		
+
 	</div>
-</div>	
-<?php include('./footer.php');?>
+</div>
+<?php include './footer.php';?>
 
 
 

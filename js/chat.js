@@ -1,22 +1,36 @@
 $(document).ready(function () {
+	// load first page
+	updateUserChat();
+
+	// check for new users every 6 seconds
 	setInterval(function () {
 		updateUserList();
 		updateUnreadMessageCount();
 	}, 60000);
+
+	// check for updates every .5 seconds
 	setInterval(function () {
 		showTypingStatus();
 		updateUserChat();
 	}, 5000);
+
+	// broken - scroll to bottom of chat list
 	$(".messages").animate({
 		scrollTop: $(document).height()
 	}, "fast");
+
+	// select active chat buddy
 	$(document).on("click", '#profile-img', function (event) {
 		$("#status-options").toggleClass("active");
 	});
+
+	// hmmm
 	$(document).on("click", '.expand-button', function (event) {
 		$("#profile").toggleClass("expanded");
 		$("#contacts").toggleClass("expanded");
 	});
+
+	// hmmm
 	$(document).on("click", '#status-options ul li', function (event) {
 		$("#profile-img").removeClass();
 		$("#status-online").removeClass("active");
@@ -46,32 +60,48 @@ $(document).ready(function () {
 		showUserChat(to_user_id);
 		$(".chatMessage").attr('id', 'chatMessage' + to_user_id);
 		$(".chatButton").attr('id', 'chatButton' + to_user_id);
-		console.log('i just selected a new contact');
+		//console.log('i just selected a new contact');
 	});
 
-	//xxx listen for return key press
-	$(document).keydown(function (event) {
-		//console.log(event);
-		if (event.which == 13) {
-			event.preventDefault();
-			var to_user_id = event.target.id;
-			//console.log('to= ' + to_user_id);
-			to_user_id = to_user_id.replace(/chatMessage/g, "");
-			//console.log("I just hit return " + to_user_id);
-			sendMessage(to_user_id);
-		}
 
+	//dnp submit button test
+	$("button[id='chatButton']").click(function () {
+		var to_user_id = $(this).attr('id');
+		//console.log("to_user_id= " + to_user_id);
+
+		to_user_id = to_user_id.replace(/chatButton/g, "");
+		console.log('submit clicked, sending to server')
+		sendMessage(to_user_id);
 	});
 
+	// hmmm submit button
 	$(document).on("click", '.submit', function (event) {
 		var to_user_id = $(this).attr('id');
 		//console.log("to_user_id= " + to_user_id);
 
 		to_user_id = to_user_id.replace(/chatButton/g, "");
-
+		console.log('submit clicked, sending to server')
 		sendMessage(to_user_id);
 	});
 
+
+
+	//dnp listen for return key press submit button
+	$(document).keydown(function (event) {
+		//console.log(event);
+		if (event.which == 13) {
+			event.preventDefault();
+			var to_user_id = event.target.id;
+			console.log('to= ' + to_user_id);
+			to_user_id = to_user_id.replace(/chatMessage/g, "");
+			console.log("I just hit return " + to_user_id);
+			sendMessage(to_user_id);
+		}
+
+	});
+
+
+	// update typing status to yes
 	$(document).on('focus', '.message-input', function () {
 		var is_type = 'yes';
 		$.ajax({
@@ -84,6 +114,8 @@ $(document).ready(function () {
 			success: function () {}
 		});
 	});
+
+	// update typing status to no
 	$(document).on('blur', '.message-input', function () {
 		var is_type = 'no';
 		$.ajax({
@@ -98,6 +130,35 @@ $(document).ready(function () {
 	});
 });
 
+(function () {
+	'use strict';
+	window.addEventListener('load', function () {
+		// Get the forms we want to add validation styles to
+		var forms = document.getElementsByClassName('chatMessageForm');
+		// Loop over them and prevent submission
+		var validation = Array.prototype.filter.call(forms, function (form) {
+			form.addEventListener('submit', function (event) {
+
+				event.preventDefault();
+				event.stopPropagation();
+
+
+			}, false);
+		});
+	}, false);
+})();
+
+// dnp submit button
+function submitMessage(event) {
+	var to_user_id = $(this).attr('id');
+	//console.log("to_user_id= " + to_user_id);
+
+	to_user_id = to_user_id.replace(/chatButton/g, "");
+	console.log('submit clicked, sending to server')
+	sendMessage(to_user_id);
+}
+
+// get user list from server
 function updateUserList() {
 	$.ajax({
 		url: "chat_action.php",
@@ -122,6 +183,7 @@ function updateUserList() {
 	});
 }
 
+// send the message to the chat buddy
 function sendMessage(to_user_id) {
 	message = $(".message-input input").val();
 	//console.log('message input= ' + message);
@@ -140,20 +202,29 @@ function sendMessage(to_user_id) {
 		dataType: "json",
 		success: function (response) {
 			$('#conversation').html(response.conversation);
-			scrollSmoothToBottom('conversation');
+			scrollPageToBottom();
+
 		}
 	});
 }
 
 //dnp https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
-function scrollSmoothToBottom(id) {
+function scrollDivToBottom(id) {
 	var div = document.getElementById(id);
 	$('#' + id).animate({
 		scrollTop: div.scrollHeight - div.clientHeight
 	}, 500);
 }
 
-// called when select a contact to show the message with that contact
+//dnp https://stackoverflow.com/questions/4249353/jquery-scroll-to-bottom-of-the-page
+function scrollPageToBottom() {
+	$("html, body").animate({
+		scrollTop: $(document).height()
+	}, 500);
+
+}
+
+// called when select a contact to show the messages with that contact
 function showUserChat(to_user_id) {
 	$.ajax({
 		url: "chat_action.php",
@@ -164,11 +235,14 @@ function showUserChat(to_user_id) {
 		},
 		dataType: "json",
 		success: function (response) {
+			// user info part
 			$('#userSection').html(response.userSection);
+			// message chat conversation part
 			$('#conversation').html(response.conversation);
+			// reset unread indicator
 			$('#unread_' + to_user_id).html('');
-			console.log(response.userSection);
-			console.log(response.conversation);
+			//console.log(response.userSection);
+			//console.log(response.conversation);
 		}
 	});
 }
@@ -186,7 +260,7 @@ function updateUserChat() {
 			dataType: "json",
 			success: function (response) {
 				$('#conversation').html(response.conversation);
-				scrollSmoothToBottom('conversation');
+				scrollPageToBottom();
 			}
 		});
 	});

@@ -1,48 +1,61 @@
 <?php
 session_start();
-include ('Chat.php');
+include 'Chat.php';
 $chat = new Chat();
-if($_POST['action'] == 'update_user_list') {
-	$chatUsers = $chat->chatUsers($_SESSION['userid']);
-	$data = array(
-		"profileHTML" => $chatUsers,	
-	);
-	echo json_encode($data);	
-}
-if($_POST['action'] == 'insert_chat') {
-	// error_log('chat_action insert_chat received');
-	// error_log('to_user_id= ' . $_POST['to_user_id']);
-	// error_log('userid= ' . $_SESSION['userid']);
-	// error_log('message= ' . $_POST['chat_message']);
-	// error_log('about to call insertChat');
 
-	$chat->insertChat($_POST['to_user_id'], $_SESSION['userid'], $_POST['chat_message']);
+// get user list
+if ($_POST['action'] == 'update_user_list') {
+    $chatUsers = $chat->chatUsers($_SESSION['userid']);
+    $data = array(
+        "profileHTML" => $chatUsers,
+    );
+    echo json_encode($data);
 }
-if($_POST['action'] == 'show_chat') {
-	$chat->showUserChat($_SESSION['userid'], $_POST['to_user_id']);
+
+// add a new chat message
+if ($_POST['action'] == 'insert_chat') {
+    // error_log('chat_action insert_chat received');
+    // error_log('to_user_id= ' . $_POST['to_user_id']);
+    // error_log('userid= ' . $_SESSION['userid']);
+    // error_log('message= ' . $_POST['chat_message']);
+    // error_log('about to call insertChat');
+
+    $chat->insertChat($_POST['to_user_id'], $_SESSION['userid'], $_POST['chat_message']);
 }
-if($_POST['action'] == 'update_user_chat') {
-	$conversation = $chat->getUserChat($_SESSION['userid'], $_POST['to_user_id']);
-	$data = array(
-		"conversation" => $conversation			
-	);
-	echo json_encode($data);
+
+// get html formated chat messages
+if ($_POST['action'] == 'show_chat') {
+    $chat->showUserChat($_SESSION['userid'], $_POST['to_user_id']);
 }
-if($_POST['action'] == 'update_unread_message') {
-	$count = $chat->getUnreadMessageCount($_POST['to_user_id'], $_SESSION['userid']);
-	$data = array(
-		"count" => $count			
-	);
-	echo json_encode($data);
+
+// get chat messages
+if ($_POST['action'] == 'update_user_chat') {
+    $conversation = $chat->getUserChat($_SESSION['userid'], $_POST['to_user_id']);
+    $data = array(
+        "conversation" => $conversation,
+    );
+    echo json_encode($data);
 }
-if($_POST['action'] == 'update_typing_status') {
-	$chat->updateTypingStatus($_POST["is_type"], $_SESSION["login_details_id"]);
+
+// get unread message count
+if ($_POST['action'] == 'update_unread_message') {
+    $count = $chat->getUnreadMessageCount($_POST['to_user_id'], $_SESSION['userid']);
+    $data = array(
+        "count" => $count,
+    );
+    echo json_encode($data);
 }
-if($_POST['action'] == 'show_typing_status') {
-	$message = $chat->fetchIsTypeStatus($_POST['to_user_id']);
-	$data = array(
-		"message" => $message			
-	);
-	echo json_encode($data);
+
+// update typing status
+if ($_POST['action'] == 'update_typing_status') {
+    $chat->updateTypingStatus($_POST["is_type"], $_SESSION["login_details_id"]);
 }
-?>
+
+// get typing status
+if ($_POST['action'] == 'show_typing_status') {
+    $message = $chat->fetchIsTypeStatus($_POST['to_user_id']);
+    $data = array(
+        "message" => $message,
+    );
+    echo json_encode($data);
+}

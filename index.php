@@ -1,251 +1,8 @@
 <?php
 session_start();
+include 'header.php';
 ?>
-<!doctype html>
-<html lang="en">
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/10207a6b26.js" crossorigin="anonymous"></script>
-
-    <title>Chat</title>
-
-
-    <style>
-        .contacts li.left .contacts-body {
-            margin-left: 60px;
-        }
-
-        .chat,
-        .contacts {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .chat li,
-        .contacts li {
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px dotted #B3A9A9;
-        }
-
-        .chat li.left .chat-body {
-            margin-left: 60px;
-        }
-
-        .chat li.right .chat-body {
-            margin-right: 60px;
-        }
-
-
-        .chat li .chat-body p {
-            margin: 0;
-            color: #777777;
-        }
-
-        .panel .far,
-        .chat .far {
-            margin-right: 5px;
-        }
-
-        .chatbody {
-            xoverflow-y: scroll;
-            xheight: 397px;
-            background-color: #FEF6EB;
-            xborder: 1px solid black;
-
-        }
-
-        /* General Scroll Bars ***********************************************/
-        /* width */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        /* Track */
-        ::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 5px #FEF6EB;
-            border-radius: 5px;
-        }
-
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #BEB9B5;
-            border-radius: 5px;
-        }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #BEB9B5;
-        }
-
-
-
-        /* End General Scroll Bar *********************************************/
-        /* pecific scroll bars ***********************************************/
-
-        /* Handle */
-        .dnp-scroll-1 ::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 5px #74828F;
-            border-radius: 5px;
-        }
-
-
-
-        /* End Specific Scroll Bar *********************************************/
-
-        .fixed-top.navbar {
-            padding: 0px;
-        }
-
-        @media (min-width: 900px) {
-            .container .navbar {
-                width: 800px;
-            }
-        }
-
-        /* Modal styles ********************************************************/
-
-        .dnp-animate-left {
-            xposition: relative;
-            animation: animateleft 0.4s;
-        }
-
-        .dnp-animate-left-out {
-            xposition: relative;
-            animation: animateleft-out 0.4s;
-        }
-
-        @keyframes animateleft {
-            from {
-                left: -300px;
-                opacity: 0;
-            }
-
-            to {
-                left: 0;
-                opacity: 1;
-            }
-        }
-
-        @keyframes animateleft-out {
-            from {
-                left: 0;
-                opacity: 1;
-            }
-
-            to {
-                left: -300px;
-                opacity: 0;
-            }
-        }
-
-        /* Full screen Modal */
-        .dnp-fullscreen-modal .modal-dialog {
-            margin: 0;
-            margin-right: auto;
-            margin-left: auto;
-            width: 100%;
-            height: 100%;
-
-        }
-
-        /* https://stackoverflow.com/questions/19140702/bootstrap-3-set-height-of-modal-window-according-to-screen-size */
-        .modal-body {
-            xmax-height: calc(100vh - 25vh);
-            xoverflow-y: auto;
-        }
-
-        @media (min-width: 768px) {
-            .dnp-fullscreen-modal .modal-dialog {
-                width: 750px;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .dnp-fullscreen-modal .modal-dialog {
-                width: 970px;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .dnp-fullscreen-modal .modal-dialog {
-                width: 1170px;
-            }
-        }
-
-        /* end modal styles ******************************************************/
-
-
-        /* Custom Colors */
-        /*
-            #BEB9B5
-            #C25B56
-            #FEF6EB
-
-            #BDDDF4, #C8C0F7, #EEB371, #F6EA97, #7BC9A0.
-
-        */
-        .dnp-bg-screen {
-            background-color: #FEF6EB;
-        }
-
-        .dnp-bg-left {
-            background-color: #FEF6EB;
-        }
-
-        .dnp-bg-primary {
-            background-color: #525564;
-        }
-
-        .dnp-bg-header1 {
-            background-color: #74828F;
-        }
-
-        .dnp-bg-header2 {
-            background-color: #73748e;
-            /* #96C0CE; */
-        }
-
-        .dnp-bg-header3 {
-            background-color: #73748e;
-            /* #BEB9B5; */
-        }
-
-        .dnp-bg-secondary {
-            background-color: #C25B56;
-        }
-
-
-
-/* Styles copied from original */
-
-
-        .contact-status {
-            position: absolute;
-            xleft: 0;
-            margin: -2px 0 0 -2px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            xborder: 2px solid #2c3e50;
-            xbackground: #95a5a6;
-        }
-
-        .online {
-            background: #2ecc71;
-
-        }
-
-    </style>
-</head>
 
 <body class="dnp-bg-primary">
     <!--
@@ -287,7 +44,7 @@ session_start();
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href=logout.php>
                             <span class="fas fa-power-off"></span>
                             Log Off
                         </a>
@@ -381,7 +138,7 @@ echo '<ul class="contacts">';
 
         // contact image
         //echo '<span class="float-left">';
-        echo '<img src="userpics/' . $user['avatar'] . '" alt="" class="rounded-circle float-left" style="width: 10%">';
+        echo '<img width="50px" height="50px" 25px, src="userpics/' . $user['avatar'] . '" alt="" class="rounded-circle float-left">';
         //echo "</span>";
 
         // TBD contact on-line status
@@ -429,11 +186,11 @@ echo '<ul class="contacts">';
 
 
         <div class="container">
-            <div class="row ">
+            <div  class="row ">
 
 
                 <!-- Right Column -->
-                <div class="col-sm-8 p-0 dnp-bg-screen ">
+                <div  class="col-sm-8 p-0 dnp-bg-screen ">
 
                     <!-- Header area -->
                     <div class="col-lg-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
@@ -442,7 +199,7 @@ echo '<ul class="contacts">';
                     </div>
 
                     <!-- Chat area -->
-                    <div class="col-lg-12 chatbody ">
+                    <div  class="col-lg-12 chatbody ">
 
                         <!-- Example bootstrap theme -->
                         <!-- https://www.codeply.com/go/bp/6mdOs5FvKU -->
@@ -459,11 +216,11 @@ echo '<ul class="contacts">';
                     <!-- As of Bootstrap 4 the Navbar is flexbox so creating a full-width search input is easier. You can simply use w-100 and d-inline utility classes: -->
                     <!-- Send Message area -->
                     <div class="dnp-bg-screen container p-2" style="height:53px;">
-                        <form class="  pr-2 my-auto d-inline w-100">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="...">
+                        <form class=" chatMessageForm pr-2 my-auto d-inline w-100" action="submitMessage()">
+                            <div class="input-group message-input">
+                                <input type="text" class=" chatMessage" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
                                 <span class="input-group-append pr-3">
-                                    <button class="btn btn-outline-dark" type="button">Send</button>
+                                    <button class="btn btn-outline-dark" type="button chatButton" id="chatButton<?php echo $currentSession; ?>">Send</button>
                                 </span>
                             </div>
                         </form>
@@ -499,19 +256,18 @@ echo '<ul class="contacts">';
 <?php } else {?>
 		<br>
 		<br>
+        <script> window.location.replace("login.php");
+        </script>
 		<strong><a href="login.php"><h3>Chat Login</h3></a></strong>
 	<?php }?>
 
+<?php include 'footer.php';?>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous">
-    </script>
+
+
     <script src="js/chat.js"></script>
+
+
     <script>
         // https://stackoverflow.com/questions/48851109/animate-css-on-bootstrap-4-modal
         // Different effects for showing and closing modal

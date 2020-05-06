@@ -220,7 +220,7 @@ class Chat
         return $conversation;
     }
 
-    // formated for direct insert into page
+    // get chat messages formated for direct insert into html page
     public function showUserChat($from_user_id, $to_user_id)
     {
         // get details about contact user
@@ -229,12 +229,12 @@ class Chat
         foreach ($userDetails as $user) {
             $toUserAvatar = $user['avatar'];
             $userSection = '
-				<div class=" ">
-				<img src="userpics/' . $user['avatar'] . '" alt=""
-				 class=" float-left rounded-circle" style="width:25%"/>
+				<div class="pl-2 pt-2 ">
+				<img width="50px" height="50px" src="userpics/' . $user['avatar'] . '" alt=""
+				 class=" float-left rounded-circle" >
 				</div>
 				<div class="">
-				<span class="float-left p-4"> <h3>' . $user['username'] . '</h3></span>
+				<span class="float-left pl-2 pt-2"> <h3>' . $user['username'] . '</h3></span>
 				</div>
 				';
         }
@@ -262,6 +262,8 @@ class Chat
         );
         echo json_encode($data);
     }
+
+    // get unread message count for user and buddy
     public function getUnreadMessageCount($senderUserid, $recieverUserid)
     {
         $sqlQuery = "
@@ -274,6 +276,8 @@ class Chat
         }
         return $output;
     }
+
+    // update typing status
     public function updateTypingStatus($is_type, $loginDetailsId)
     {
         $sqlUpdate = "
@@ -282,6 +286,8 @@ class Chat
 			WHERE id = '" . $loginDetailsId . "'";
         mysqli_query($this->dbConnect, $sqlUpdate);
     }
+
+    // get typing status
     public function fetchIsTypeStatus($userId)
     {
         $sqlQuery = "
@@ -296,17 +302,21 @@ class Chat
         }
         return $output;
     }
+
+    // update login status
     public function insertUserLoginDetails($userId)
     {
         $sqlInsert = "
 			INSERT INTO " . $this->chatLoginDetailsTable . " (userid)
 			VALUES ('" . $userId . "')";
-        error_log('insert sql= ' . $sqlInsert);
+        //error_log('insert sql= ' . $sqlInsert);
 
         mysqli_query($this->dbConnect, $sqlInsert);
         $lastInsertId = mysqli_insert_id($this->dbConnect);
         return $lastInsertId;
     }
+
+    // set last activity time for user
     public function updateLastActivity($loginDetailsId)
     {
         $sqlUpdate = "
@@ -315,6 +325,8 @@ class Chat
 			WHERE id = '" . $loginDetailsId . "'";
         mysqli_query($this->dbConnect, $sqlUpdate);
     }
+
+    // get last activity time for user
     public function getUserLastActivity($userId)
     {
         $sqlQuery = "
