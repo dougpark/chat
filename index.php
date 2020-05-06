@@ -183,11 +183,11 @@ echo '<ul class="contacts">';
         </div>
         <!-- end Contacts modal panel -->
 
-        <div class="container">
-            <div  class="row ">
+        <div id="right2" class="container">
+            <div class="row ">
 
                 <!-- Right Column -->
-                <div  class="col-sm-8 p-0 dnp-bg-screen ">
+                <div id="right" class="col-sm-8 p-0 dnp-bg-screen ">
 
                     <!-- Header area -->
                     <div class="col-lg-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">

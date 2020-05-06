@@ -237,8 +237,12 @@ function scrollDivToBottom(id) {
 
 //dnp https://stackoverflow.com/questions/4249353/jquery-scroll-to-bottom-of-the-page
 function scrollPageToBottom() {
+	var div = document.getElementById('right');
+	var div2 = $('#right2')[0];
+	var h = $(window).height();
+	var doc = $(document).height();
 	$("html, body").animate({
-		scrollTop: $(document).height()
+		scrollTop: $(document).height() - h
 	}, 500);
 
 }
