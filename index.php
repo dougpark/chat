@@ -201,14 +201,8 @@ echo '<ul class="contacts">';
                     <!-- Chat area -->
                     <div  class="col-lg-12 chatbody ">
 
-                        <!-- Example bootstrap theme -->
-                        <!-- https://www.codeply.com/go/bp/6mdOs5FvKU -->
-
                         <!-- all conversation messages are generated and html formated from the php code -->
                         <div id="conversation"> </div>
-
-
-
                     </div>
 
 
@@ -216,15 +210,16 @@ echo '<ul class="contacts">';
                     <!-- As of Bootstrap 4 the Navbar is flexbox so creating a full-width search input is easier. You can simply use w-100 and d-inline utility classes: -->
                     <!-- Send Message area -->
                     <div class="dnp-bg-screen container p-2" style="height:53px;">
-                        <form class=" chatMessageForm pr-2 my-auto d-inline w-100" action="submitMessage()">
+                        <form class="  pr-2 my-auto d-inline w-100 chatMessageForm" id="chatMessageForm<?php echo $currentSession; ?>">
                             <div class="input-group message-input">
-                                <input type="text" class=" chatMessage" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
+                                <input type="text" class=" form-control chatMessage message-input" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
                                 <span class="input-group-append pr-3">
-                                    <button class="btn btn-outline-dark" type="button chatButton" id="chatButton<?php echo $currentSession; ?>">Send</button>
+                                    <button class="btn btn-outline-dark chatMessageButton" type="button chatButton" id="chatMessageButton<?php echo $currentSession; ?>">Send</button>
                                 </span>
                             </div>
                         </form>
                     </div>
+
 
                     <!-- <form class="mx-2 my-auto d-inline w-100">
                     <div class="input-group">

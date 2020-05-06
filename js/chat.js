@@ -64,41 +64,48 @@ $(document).ready(function () {
 	});
 
 
-	//dnp submit button test
-	$("button[id='chatButton']").click(function () {
+	// dnp click on send button -- this one works --
+	// find by unique class
+	$(".chatMessageButton").click(function () {
 		var to_user_id = $(this).attr('id');
-		//console.log("to_user_id= " + to_user_id);
-
-		to_user_id = to_user_id.replace(/chatButton/g, "");
-		console.log('submit clicked, sending to server')
+		to_user_id = to_user_id.replace(/chatMessageButton/g, "");
 		sendMessage(to_user_id);
 	});
 
+	// dnp look for Enter key on button
+	$('.chatMessageButton').keyup(function (e) {
+		if (e.which == 13) {
+			e.preventDefault();
+			e.stopPropagation();
+			$(this).blur();
+			$('.chatMessageButton').focus().click();
+		}
+	});
+
+	// original
 	// hmmm submit button
-	$(document).on("click", '.submit', function (event) {
-		var to_user_id = $(this).attr('id');
-		//console.log("to_user_id= " + to_user_id);
+	// $(document).on("click", '.submit', function (event) {
+	// 	var to_user_id = $(this).attr('id');
+	// 	//console.log("to_user_id= " + to_user_id);
 
-		to_user_id = to_user_id.replace(/chatButton/g, "");
-		console.log('submit clicked, sending to server')
-		sendMessage(to_user_id);
-	});
+	// 	to_user_id = to_user_id.replace(/chatButton/g, "");
+	// 	console.log('submit clicked, sending to server')
+	// 	sendMessage(to_user_id);
+	// });
 
 
 
 	//dnp listen for return key press submit button
-	$(document).keydown(function (event) {
-		//console.log(event);
-		if (event.which == 13) {
-			event.preventDefault();
-			var to_user_id = event.target.id;
-			console.log('to= ' + to_user_id);
-			to_user_id = to_user_id.replace(/chatMessage/g, "");
-			console.log("I just hit return " + to_user_id);
-			sendMessage(to_user_id);
-		}
+	// $(document).keydown(function (event) {
+	// 	//console.log(event);
+	// 	if (event.which == 13) {
+	// 		event.preventDefault();
+	// 		var to_user_id = event.target.id;
+	// 		to_user_id = to_user_id.replace(/chatMessageButton/g, "");
+	// 		sendMessage(to_user_id);
+	// 	}
 
-	});
+	// });
 
 
 	// update typing status to yes
@@ -111,7 +118,9 @@ $(document).ready(function () {
 				is_type: is_type,
 				action: 'update_typing_status'
 			},
-			success: function () {}
+			success: function () {
+				
+			}
 		});
 	});
 
@@ -125,38 +134,40 @@ $(document).ready(function () {
 				is_type: is_type,
 				action: 'update_typing_status'
 			},
-			success: function () {}
+			success: function () {
+				
+			}
 		});
 	});
 });
 
-(function () {
-	'use strict';
-	window.addEventListener('load', function () {
-		// Get the forms we want to add validation styles to
-		var forms = document.getElementsByClassName('chatMessageForm');
-		// Loop over them and prevent submission
-		var validation = Array.prototype.filter.call(forms, function (form) {
-			form.addEventListener('submit', function (event) {
+// (function () {
+// 	'use strict';
+// 	window.addEventListener('load', function () {
+// 		// Get the forms we want to add validation styles to
+// 		var forms = document.getElementsByClassName('chatMessageForm');
+// 		// Loop over them and prevent submission
+// 		var validation = Array.prototype.filter.call(forms, function (form) {
+// 			form.addEventListener('submit', function (event) {
 
-				event.preventDefault();
-				event.stopPropagation();
+// 				event.preventDefault();
+// 				event.stopPropagation();
 
 
-			}, false);
-		});
-	}, false);
-})();
+// 			}, false);
+// 		});
+// 	}, false);
+// })();
 
 // dnp submit button
-function submitMessage(event) {
-	var to_user_id = $(this).attr('id');
-	//console.log("to_user_id= " + to_user_id);
+// function submitMessage(event) {
+// 	var to_user_id = $(this).attr('id');
+// 	//console.log("to_user_id= " + to_user_id);
 
-	to_user_id = to_user_id.replace(/chatButton/g, "");
-	console.log('submit clicked, sending to server')
-	sendMessage(to_user_id);
-}
+// 	to_user_id = to_user_id.replace(/chatButton/g, "");
+// 	console.log('submit clicked, sending to server')
+// 	sendMessage(to_user_id);
+// }
 
 // get user list from server
 function updateUserList() {
