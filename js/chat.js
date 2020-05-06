@@ -70,7 +70,7 @@ $(document).ready(function () {
 	// find by unique class
 	$(".chatMessageButton").click(function () {
 		var to_user_id = $(this).attr('id');
-		to_user_id = to_user_id.replace(/chatMessageButton/g, "");
+		to_user_id = to_user_id.replace(/chatButton/g, "");
 		//e.preventDefault();
 		//e.stopPropagation();
 		$('.chatMessage').focus();
