@@ -2,7 +2,7 @@ $(document).ready(function () {
 	// load first page
 	//$('#showContacts')[0].click();
 	updateUserChat();
-	console.log('document loaded')
+	//console.log('document loaded')
 
 	// check for new users every 6 seconds
 	setInterval(function () {
@@ -62,7 +62,13 @@ $(document).ready(function () {
 		showUserChat(to_user_id);
 		$(".chatMessage").attr('id', 'chatMessage' + to_user_id);
 		$(".chatButton").attr('id', 'chatButton' + to_user_id);
-		//console.log('i just selected a new contact');
+
+		// dnp save the current buddy
+		setUserData({
+			attr: "touserid",
+			value: to_user_id
+		});
+
 	});
 
 
@@ -80,6 +86,7 @@ $(document).ready(function () {
 
 	//dnp look for Enter key on button
 	$('.chatMessage').keyup(function (e) {
+
 		if (e.which == 13) {
 			//e.preventDefault();
 			//e.stopPropagation();
@@ -116,7 +123,7 @@ $(document).ready(function () {
 	// });
 
 
-	// update typing status to yes
+	// send typing status to server for logged-in user to Yes
 	$(document).on('focus', '.message-input', function () {
 		var is_type = 'yes';
 		$.ajax({
@@ -132,7 +139,7 @@ $(document).ready(function () {
 		});
 	});
 
-	// update typing status to no
+	// send typing status to server for logged-in user to No
 	$(document).on('blur', '.message-input', function () {
 		var is_type = 'no';
 		$.ajax({
@@ -148,6 +155,19 @@ $(document).ready(function () {
 		});
 	});
 });
+
+let prevHash = '';
+
+
+// dnp playing with meta-data datasets
+// save in DOM index.php
+function setUserData(config) {
+	$("#user_data")[0].dataset[config.attr] = config.value;
+}
+
+function getUserData(attr) {
+	return $("#user_data")[0].dataset[attr];
+}
 
 // (function () {
 // 	'use strict';
@@ -177,7 +197,7 @@ $(document).ready(function () {
 // 	sendMessage(to_user_id);
 // }
 
-// get user list from server
+// get user list from server -- seems to only update the status of users
 function updateUserList() {
 	$.ajax({
 		url: "chat_action.php",
@@ -202,7 +222,7 @@ function updateUserList() {
 	});
 }
 
-// send the message to the chat buddy
+// send the message to the server to to_user_id
 function sendMessage(to_user_id) {
 	message = $(".message-input input").val();
 	//console.log('message input= ' + message);
@@ -216,11 +236,16 @@ function sendMessage(to_user_id) {
 		data: {
 			to_user_id: to_user_id,
 			chat_message: message,
+			hash: prevHash,
 			action: 'insert_chat'
 		},
 		dataType: "json",
 		success: function (response) {
 			$('#conversationSection').html(response.conversation);
+			// dnp hash
+			// this hash should always be new because we just sent a new message
+			prevHash = response.hash;
+			//console.log('sendMessage hash = ' + prevHash);
 			scrollPageToBottom();
 
 		}
@@ -247,29 +272,39 @@ function scrollPageToBottom() {
 
 }
 
-// called when select a contact to show the messages with that contact
+// called when select a contact to show the messages with that contact by to_user_id
 function showUserChat(to_user_id) {
 	$.ajax({
 		url: "chat_action.php",
 		method: "POST",
 		data: {
 			to_user_id: to_user_id,
+			hash: prevHash,
 			action: 'show_chat'
 		},
 		dataType: "json",
 		success: function (response) {
-			// user info part
-			$('#userSection').html(response.userSection);
-			// message chat conversation part
-			$('#conversationSection').html(response.conversation);
-			// reset unread indicator
-			$('#unread_' + to_user_id).html('');
-			//console.log(response.userSection);
-			//console.log(response.conversation);
+			// dnp hash
+			let hash = response.hash;
+			//console.log('showUserChat hash = ' + hash);
+			// only update page if hash is new
+			if (hash != prevHash) {
+				// user info part
+				$('#userSection').html(response.userSection);
+				// message chat conversation part
+				$('#conversationSection').html(response.conversation);
+				// reset unread indicator
+				$('#unread_' + to_user_id).html('');
+				//console.log(response.userSection);
+				//console.log(response.conversation);
+				scrollPageToBottom();
+				prevHash = hash;
+			}
 		}
 	});
 }
 
+// get conversation based on to_user-id
 function updateUserChat() {
 	$('li.contact.active').each(function () {
 		var to_user_id = $(this).attr('data-touserid');
@@ -278,17 +313,26 @@ function updateUserChat() {
 			method: "POST",
 			data: {
 				to_user_id: to_user_id,
+				hash: prevHash,
 				action: 'update_user_chat'
 			},
 			dataType: "json",
 			success: function (response) {
-				$('#conversationSection').html(response.conversation);
-				scrollPageToBottom();
+				// dnp hash
+				let hash = response.hash;
+				//console.log('updateUserChat hash = ' + hash);
+				// only update page if hash is new
+				if (hash != prevHash) {
+					$('#conversationSection').html(response.conversation);
+					scrollPageToBottom();
+					prevHash = hash;
+				}
 			}
 		});
 	});
 }
 
+// update unread message count in user list for a to_user_id
 function updateUnreadMessageCount() {
 	$('li.contact').each(function () {
 		if (!$(this).hasClass('active')) {
@@ -311,9 +355,35 @@ function updateUnreadMessageCount() {
 	});
 }
 
+// get typing status from server for to_user_id
 function showTypingStatus() {
+
+	//dnp test
+	//const user_data = $('#user_data')[0];
+	const un = getUserData('loggedusername');
+	const ui = getUserData('loggeduserid');
+	const tu = getUserData('touserid');
+	const tn = getUserData('tousername');
+	setUserData({
+		attr: 'test',
+		value: 'doug'
+	});
+	const test = getUserData('hey');
+
+	//const un = user_data.dataset.loggedusername;
+	// const ui = user_data.dataset.loggeduserid;
+	// const tu = user_data.dataset.touserid;
+	// const tn = user_data.dataset.tousername;
+
+	// const un2 = $('#loggedusername').attr('data');
+	// const ui2 = $('#loggeduserid').attr('data');
+	// const tu2 = $('#touserid').attr('data');
+	//console.log('un= ' + un + ' ui= ' + ui + ' tu= ' + tu);
+
+
 	$('li.contact.active').each(function () {
 		var to_user_id = $(this).attr('data-touserid');
+
 		$.ajax({
 			url: "chat_action.php",
 			method: "POST",
@@ -323,7 +393,8 @@ function showTypingStatus() {
 			},
 			dataType: "json",
 			success: function (response) {
-				$('#isTyping_' + to_user_id).html(response.message);
+				$('#isTyping').html(response.message);
+				// + to_user_id	
 			}
 		});
 	});

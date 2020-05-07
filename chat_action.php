@@ -20,21 +20,25 @@ if ($_POST['action'] == 'insert_chat') {
     // error_log('message= ' . $_POST['chat_message']);
     // error_log('about to call insertChat');
 
-    $chat->insertChat($_POST['to_user_id'], $_SESSION['userid'], $_POST['chat_message']);
+    $chat->insertChat($_POST['to_user_id'], $_SESSION['userid'], $_POST['chat_message'], $_POST['hash']);
 }
 
 // get html formated chat messages
 if ($_POST['action'] == 'show_chat') {
-    $chat->showUserChat($_SESSION['userid'], $_POST['to_user_id']);
+    $chat->showUserChat($_SESSION['userid'], $_POST['to_user_id'], $_POST['hash']);
 }
 
 // get chat messages
 if ($_POST['action'] == 'update_user_chat') {
-    $conversation = $chat->getUserChat($_SESSION['userid'], $_POST['to_user_id']);
-    $data = array(
-        "conversation" => $conversation,
-    );
-    echo json_encode($data);
+
+    $result = $chat->getUserChat($_SESSION['userid'], $_POST['to_user_id'], $_POST['hash']);
+    //$data = array(
+    //    "conversation" => $conversation,
+    //);
+    // echo json_encode($data);
+    // dnp hash
+    echo json_encode($result);
+
 }
 
 // get unread message count

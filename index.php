@@ -80,6 +80,20 @@ include 'Chat.php';
         $currentSession = $user['current_session'];
         $loggedUserName = $user['username'];
         $userPic = $user['avatar'];
+
+        // dnp trying to set some "variables" that javascript can use
+        // loggedUserName
+        // loggedUserid
+        // toUserName
+        // toUserId
+        echo '<span id="user_data" '
+            . 'data-loggedusername="' . $loggedUserName . '"'
+            . 'data-loggeduserid="' . $_SESSION['userid'] . '"'
+            . 'data-currentsession="' . $user['current_session'] . '"'
+            . 'data-touserid=" "'
+            . 'data-tousername=" "'
+            . '></span>';
+
     }
     ?>
 
@@ -153,7 +167,7 @@ echo '<ul class="contacts">';
         echo '<span id="unread_' . $user['userid'] . '" class="badge badge-pill badge-danger"  >' . $chat->getUnreadMessageCount($user['userid'], $_SESSION['userid']) . '</span>';
 
         // contact is typing
-        echo '<small class="float-right text-dark"><span id="isTyping_' . $user['userid'] . '" class="isTyping"></span></small>';
+        echo '<small class="float-right text-dark"><span id="xisTyping_' . $user['userid'] . '" class="isTyping"></span></small>';
 
         //  contact last activity
         echo '<small class="float-right text-dark">';
@@ -206,7 +220,8 @@ echo '<ul class="contacts">';
                     <!-- https://stackoverflow.com/questions/39784351/bootstrap-4-how-to-make-100-width-search-input-in-navbar -->
                     <!-- As of Bootstrap 4 the Navbar is flexbox so creating a full-width search input is easier. You can simply use w-100 and d-inline utility classes: -->
                     <!-- Send Message area -->
-                    <div class="dnp-bg-screen container p-2" style="height:53px;">
+                    <div class="dnp-bg-screen container p-2" style="height:73px;">
+                    <div id="isTyping" a="_<?php echo $user['userid']; ?>"></div>
                         <!-- <xform class="  pr-2 my-auto d-inline w-100 chatMessageForm" id="chatMessageForm<?php echo $currentSession; ?>"> -->
                             <div class="input-group message-input">
                                 <input type="text" class=" form-control chatMessage message-input" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">

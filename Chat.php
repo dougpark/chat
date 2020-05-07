@@ -102,7 +102,7 @@ class Chat
         mysqli_query($this->dbConnect, $sqlUserUpdate);
     }
 
-    public function insertChat($reciever_userid, $user_id, $chat_message)
+    public function insertChat($reciever_userid, $user_id, $chat_message, $hash_in)
     {
         $sqlInsert = "
 			INSERT INTO " . $this->chatTable . "
@@ -123,9 +123,12 @@ class Chat
             return ('Error in query: ' . mysqli_error($this->dbConnect));
         } else {
             //error_log('good result');
-            $conversation = $this->getUserChat($user_id, $reciever_userid);
+            $result = $this->getUserChat($user_id, $reciever_userid, $hash_in);
+            $conversation = $result['conversation'];
+            $hash = $result['hash'];
             $data = array(
                 "conversation" => $conversation,
+                "hash" => $hash,
             );
             echo json_encode($data);
         }
@@ -164,7 +167,7 @@ class Chat
     }
 
     // get conversation and format with html for display on web page
-    public function getUserChat($from_user_id, $to_user_id)
+    public function getUserChat($from_user_id, $to_user_id, $hash_in)
     {
         $fromUserAvatar = $this->getUserAvatar($from_user_id);
         $toUserAvatar = $this->getUserAvatar($to_user_id);
@@ -217,11 +220,20 @@ class Chat
             $conversation .= '</li>';
         }
         $conversation .= '</ul>';
-        return $conversation;
+        // dnp hash
+        $hash = hash('crc32b', $conversation);
+        // if hash matches hash_in then no changes so do not return a big string
+        if ($hash == $hash_in) {$conversation = '';}
+        $data = array(
+            "conversation" => $conversation,
+            "hash" => $hash,
+        );
+        //echo json_encode($data);
+        return $data;
     }
 
     // get chat messages formated for direct insert into html page
-    public function showUserChat($from_user_id, $to_user_id)
+    public function showUserChat($from_user_id, $to_user_id, $hash_in)
     {
         // get details about contact user
         $userDetails = $this->getUserDetails($to_user_id);
@@ -239,7 +251,10 @@ class Chat
 				';
         }
         // get conversation between me(logged in user) and contact user
-        $conversation = $this->getUserChat($from_user_id, $to_user_id);
+        $result = $this->getUserChat($from_user_id, $to_user_id, $hash_in);
+        $conversation = $result['conversation'];
+        // dnp hash
+        $hash = $result['hash'];
 
         // update chat user read status
         $sqlUpdate = "
@@ -259,8 +274,9 @@ class Chat
         $data = array(
             "userSection" => $userSection,
             "conversation" => $conversation,
+            "hash" => $hash,
         );
-        echo json_encode($data);
+        echo json_encode($data); // return json encoded array with html formated text
     }
 
     // get unread message count for user and buddy
@@ -297,7 +313,7 @@ class Chat
         $output = '';
         foreach ($result as $row) {
             if ($row["is_typing"] == 'yes') {
-                $output = ' - <small><em>Typing...</em></small>';
+                $output = 'Typing';
             }
         }
         return $output;
