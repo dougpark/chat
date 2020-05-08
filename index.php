@@ -18,6 +18,7 @@ include 'header.php';
     include 'Chat.php';
     $chat = new Chat();
 
+    // get loggeduser details
     $loggedUser = $chat->getUserDetails($_SESSION['userid']);
     $currentSession = '';
     $loggedUserName = '';
@@ -114,7 +115,9 @@ include 'header.php';
 
                     <div class="modal-body dnp-modal">
                         <!-- contact list generated from php code  -->
-                        <div class="  text-dark pt-1 pl-1">
+                        <div id="contactlist" class="  text-dark pt-1 pl-1">
+                             <!-- put div here -->
+                             <!-- move this to js so can update everytime user opens contacts list -->
                             <?php $chat->getUserListDetails($_SESSION['userid']);?>
                         </div>
                     </div>
@@ -153,14 +156,12 @@ include 'header.php';
                     <!-- Send Message area -->
                     <div class="dnp-bg-screen container p-2" style="height:73px;">
                     <div id="isTyping" a="_<?php echo $user['userid']; ?>"></div>
-                        <!-- <xform class="  pr-2 my-auto d-inline w-100 chatMessageForm" id="chatMessageForm<?php echo $currentSession; ?>"> -->
-                            <div class="input-group message-input">
-                                <input type="text" class=" form-control chatMessage message-input" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
-                                <span class="input-group-append pr-3">
-                                    <button class="btn btn-outline-dark chatButton chatMessageButton" type="button chatButton" id="chatButton<?php echo $currentSession; ?>">Send</button>
-                                </span>
-                            </div>
-                        <!-- </xform> -->
+                        <div class="input-group messageInput pb-2">
+                            <input type="text" class=" form-control chatMessage" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
+                            <span class="input-group-append pr-3">
+                                <button class="btn btn-outline-dark chatButton" type="button" id="chatButton<?php echo $currentSession; ?>">Send</button>
+                            </span>
+                        </div>
                     </div>
 
 

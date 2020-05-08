@@ -304,25 +304,26 @@ class Chat
     }
 
     // set/update typing status
-    public function updateTypingStatus($is_type, $loginDetailsId)
+    public function updateTypingStatus($is_type, $loginDetailsId, $buddyId)
     {
         $sqlUpdate = "
 			UPDATE " . $this->chatLoginDetailsTable . "
-			SET is_typing = '" . $is_type . "'
-			WHERE id = '" . $loginDetailsId . "'";
+			SET is_typing = '" . $is_type . "' , buddy_id = '" . $buddyId . "'
+            WHERE id = '" . $loginDetailsId . "'";
+        error_log($sqlUpdate);
         mysqli_query($this->dbConnect, $sqlUpdate);
     }
 
     // get typing status
-    public function fetchIsTypeStatus($userId)
+    public function fetchIsTypeStatus($userId, $buddyId)
     {
         $sqlQuery = "
-		SELECT is_typing FROM " . $this->chatLoginDetailsTable . "
+		SELECT is_typing, buddy_id FROM " . $this->chatLoginDetailsTable . "
 		WHERE userid = '" . $userId . "' ORDER BY last_activity DESC LIMIT 1";
         $result = $this->getData($sqlQuery);
         $output = '';
         foreach ($result as $row) {
-            if ($row["is_typing"] == 'yes') {
+            if ($row["is_typing"] == 'yes' and $row["buddy_id"] == $buddyId) {
                 $output = 'Typing';
             }
         }

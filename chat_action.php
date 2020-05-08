@@ -52,12 +52,12 @@ if ($_POST['action'] == 'update_unread_message') {
 
 // update typing status
 if ($_POST['action'] == 'update_typing_status') {
-    $chat->updateTypingStatus($_POST["is_type"], $_SESSION["login_details_id"]);
+    $chat->updateTypingStatus($_POST["is_type"], $_SESSION["login_details_id"], $_POST["buddy_id"]);
 }
 
 // get typing status
 if ($_POST['action'] == 'show_typing_status') {
-    $message = $chat->fetchIsTypeStatus($_POST['to_user_id']);
+    $message = $chat->fetchIsTypeStatus($_POST['to_user_id'], $_POST["buddy_id"]);
     $data = array(
         "message" => $message,
     );

@@ -74,7 +74,7 @@ $(document).ready(function () {
 
 	// dnp click on send button -- this one works --
 	// find by unique class
-	$(".chatMessageButton").click(function () {
+	$(".chatButton").click(function () {
 		var to_user_id = $(this).attr('id');
 		to_user_id = to_user_id.replace(/chatButton/g, "");
 		//e.preventDefault();
@@ -91,7 +91,7 @@ $(document).ready(function () {
 			//e.preventDefault();
 			//e.stopPropagation();
 			$(this).blur();
-			$('.chatMessageButton').focus().click();
+			$('.chatButton').focus().click();
 			$('.chatMessage').focus();
 			return false;
 		}
@@ -124,13 +124,18 @@ $(document).ready(function () {
 
 
 	// send typing status to server for logged-in user to Yes
-	$(document).on('focus', '.message-input', function () {
+	$(document).on('focus', '.messageInput', function () {
+		//dnp get to_user_id here
+		// send to update typing to_user_id
+		const tu = getUserData('touserid');
+
 		var is_type = 'yes';
 		$.ajax({
 			url: "chat_action.php",
 			method: "POST",
 			data: {
 				is_type: is_type,
+				buddy_id: tu,
 				action: 'update_typing_status'
 			},
 			success: function () {
@@ -140,13 +145,17 @@ $(document).ready(function () {
 	});
 
 	// send typing status to server for logged-in user to No
-	$(document).on('blur', '.message-input', function () {
+	$(document).on('blur', '.messageInput', function () {
+
+		const tu = getUserData('touserid');
+
 		var is_type = 'no';
 		$.ajax({
 			url: "chat_action.php",
 			method: "POST",
 			data: {
 				is_type: is_type,
+				buddy_id: tu,
 				action: 'update_typing_status'
 			},
 			success: function () {
@@ -225,9 +234,9 @@ function updateUserList() {
 
 // send the message to the server to to_user_id
 function sendMessage(to_user_id) {
-	message = $(".message-input input").val();
+	message = $(".messageInput input").val();
 	//console.log('message input= ' + message);
-	$('.message-input input').val('');
+	$('.messageInput input').val('');
 	if ($.trim(message) == '') {
 		return false;
 	}
@@ -288,7 +297,7 @@ function showUserChat(to_user_id) {
 		success: function (response) {
 			// dnp hash
 			let hash = response.hash;
-			
+
 			// only update page if hash is new
 			if (hash != prevHash) {
 				// user info part
@@ -297,7 +306,7 @@ function showUserChat(to_user_id) {
 				$('#conversationSection').html(response.conversation);
 				// reset unread indicator
 				$('#unread_' + to_user_id).html('');
-				
+
 				scrollPageToBottom();
 				prevHash = hash;
 			}
@@ -384,12 +393,14 @@ function showTypingStatus() {
 
 	$('li.contact.active').each(function () {
 		var to_user_id = $(this).attr('data-touserid');
+		const tu = getUserData('loggeduserid');
 
 		$.ajax({
 			url: "chat_action.php",
 			method: "POST",
 			data: {
 				to_user_id: to_user_id,
+				buddy_id: tu,
 				action: 'show_typing_status'
 			},
 			dataType: "json",

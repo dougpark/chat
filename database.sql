@@ -66,6 +66,7 @@ CREATE TABLE `chat_login_details` (
   `is_typing` enum('no','yes') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+ALTER TABLE `chat_login_details`  ADD `to_user_id` INT(11) NULL  AFTER `is_typing`;
 
 --
 -- Indexes for table `chat_login_details`
