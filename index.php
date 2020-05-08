@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'header.php';
+
 ?>
 
 
@@ -12,7 +13,23 @@ include 'header.php';
  -->
 
 
-<?php if (isset($_SESSION['userid']) && $_SESSION['userid']) {?>
+<?php if (isset($_SESSION['userid']) && $_SESSION['userid']) {
+
+    include 'Chat.php';
+    $chat = new Chat();
+
+    $loggedUser = $chat->getUserDetails($_SESSION['userid']);
+    $currentSession = '';
+    $loggedUserName = '';
+    foreach ($loggedUser as $user) {
+        $currentSession = $user['current_session'];
+        $loggedUserName = $user['username'];
+        $userPic = $user['avatar'];
+    }
+
+    ?>
+
+
     <!-- big outer container -->
     <div class="container px-10 ">
 
@@ -70,33 +87,6 @@ include 'header.php';
             </div> <!-- end main_nav navbar-collapse.// -->
         </nav>
 
-	    <?php
-include 'Chat.php';
-    $chat = new Chat();
-    $loggedUser = $chat->getUserDetails($_SESSION['userid']);
-    $currentSession = '';
-    $loggedUserName = '';
-    foreach ($loggedUser as $user) {
-        $currentSession = $user['current_session'];
-        $loggedUserName = $user['username'];
-        $userPic = $user['avatar'];
-
-        // dnp trying to set some "variables" that javascript can use
-        // loggedUserName
-        // loggedUserid
-        // toUserName
-        // toUserId
-        echo '<span id="user_data" '
-            . 'data-loggedusername="' . $loggedUserName . '"'
-            . 'data-loggeduserid="' . $_SESSION['userid'] . '"'
-            . 'data-currentsession="' . $user['current_session'] . '"'
-            . 'data-touserid=" "'
-            . 'data-tousername=" "'
-            . '></span>';
-
-    }
-    ?>
-
         <!-- https://jsfiddle.net/5qeyju7v/ -->
         <!-- Contacts modal panel -->
         <!-- class="modal fade animate" -->
@@ -125,66 +115,10 @@ include 'Chat.php';
                     <div class="modal-body dnp-modal">
                         <!-- contact list generated from php code  -->
                         <div class="  text-dark pt-1 pl-1">
-
-                    <?php
-echo '<ul class="contacts">';
-    $chatUsers = $chat->chatUsers($_SESSION['userid']);
-    foreach ($chatUsers as $user) {
-        $status = 'offline';
-        if ($user['online']) {
-            $status = 'online';
-        } else { $status = 'offline';}
-        $activeUser = '';
-        if ($user['userid'] == $currentSession) {
-            $activeUser = "active";
-        }
-        $lastActivity = $chat->getUsersLastConversationDate($_SESSION['userid'], $user['userid']);
-        $lastMessage = $chat->getUsersLastMessage($_SESSION['userid'], $user['userid']);
-
-        //$lastActivity = $chat->getUserLastActivity($user['userid']);
-
-        echo '<li id="' . $user['userid'] . '" class="left clearfix contact ' . $activeUser . '" data-touserid="' . $user['userid'] . '" data-tousername="' . $user['username'] . '">';
-        echo ' <button type="button" data-dismiss="modal" class="text-left btn-block"';
-        echo ' style="padding: 0; border: none; background: none;">';
-
-        // contact image
-        //echo '<span class="float-left">';
-        echo '<img width="50px" height="50px" 25px, src="userpics/' . $user['avatar'] . '" alt="" class="rounded-circle float-left">';
-        //echo "</span>";
-
-        // TBD contact on-line status
-        echo '<span id="status_' . $user['userid'] . '" class="float-left contact-status ' . $status . '"></span>';
-
-        // contact name
-        echo '<div class="contacts-body clearfix pr-1">';
-        // echo '<div class="header">';
-        echo '<strong class="primary-font">' . $user['username'] . '</strong>';
-
-        // contact un-read message count
-        echo '<span id="unread_' . $user['userid'] . '" class="badge badge-pill badge-danger"  >' . $chat->getUnreadMessageCount($user['userid'], $_SESSION['userid']) . '</span>';
-
-        // contact is typing
-        echo '<small class="float-right text-dark"><span id="xisTyping_' . $user['userid'] . '" class="isTyping"></span></small>';
-
-        //  contact last activity
-        echo '<small class="float-right text-dark">';
-        echo '<span class="far fa-clock"></span> ' . $lastActivity;
-        echo '</small>';
-
-        //  contact last message text
-        echo '<p class="text-dark " style="font-size: .75rem">';
-        echo $lastMessage;
-        echo '</p>';
-
-        // echo '</div>'; // end header
-        echo '</div>'; // end contacts-body
-        echo '</button>';
-        echo '</li>';
-    }
-    echo '</ul>';
-    ?>
+                            <?php $chat->getUserListDetails($_SESSION['userid']);?>
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 
@@ -268,7 +202,7 @@ echo '<ul class="contacts">';
 <?php include 'footer.php';?>
 
 
-
+    <!-- local js code -->
     <script src="js/chat.js"></script>
 
 
