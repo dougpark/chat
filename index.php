@@ -111,12 +111,9 @@ include 'Chat.php';
                             <span aria-hidden="true" class="fas fa-chevron-left"></span>
                         </button>
 
-
-
                         <button type="button" class="ml-auto btn btn-default" data-dismiss="modal">
-
-
-                            <div class="p-1 align-middle float-right"> <h3><?php echo $loggedUserName; ?>
+                            <div class="p-1 align-middle float-right">
+                            <h3><?php echo $loggedUserName; ?>
                             </div>
                             <div>
                              <?php echo '<img id="profile-img" src="userpics/' . $userPic . '" class="online px-0 align-middle float-right rounded-circle" alt="" style="width: 25%">'; ?>
@@ -126,7 +123,7 @@ include 'Chat.php';
                     </div>
 
                     <div class="modal-body dnp-modal">
-                        <!-- contact list -->
+                        <!-- contact list generated from php code  -->
                         <div class="  text-dark pt-1 pl-1">
 
                     <?php

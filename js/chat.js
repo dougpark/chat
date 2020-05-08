@@ -156,6 +156,7 @@ $(document).ready(function () {
 	});
 });
 
+// hash for conversation message to prevent large data downloads every request
 let prevHash = '';
 
 
@@ -241,11 +242,12 @@ function sendMessage(to_user_id) {
 		},
 		dataType: "json",
 		success: function (response) {
-			$('#conversationSection').html(response.conversation);
 			// dnp hash
 			// this hash should always be new because we just sent a new message
 			prevHash = response.hash;
-			//console.log('sendMessage hash = ' + prevHash);
+
+			$('#conversationSection').html(response.conversation);
+
 			scrollPageToBottom();
 
 		}
@@ -286,7 +288,7 @@ function showUserChat(to_user_id) {
 		success: function (response) {
 			// dnp hash
 			let hash = response.hash;
-			//console.log('showUserChat hash = ' + hash);
+			
 			// only update page if hash is new
 			if (hash != prevHash) {
 				// user info part
@@ -295,8 +297,7 @@ function showUserChat(to_user_id) {
 				$('#conversationSection').html(response.conversation);
 				// reset unread indicator
 				$('#unread_' + to_user_id).html('');
-				//console.log(response.userSection);
-				//console.log(response.conversation);
+				
 				scrollPageToBottom();
 				prevHash = hash;
 			}
