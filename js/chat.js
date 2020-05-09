@@ -1,4 +1,41 @@
+// dnp datastore object
+class Ds {
+	constructor() {
+		// hash for conversation message to prevent large data downloads every request
+		this.conversationHash = '';
+		this.loggedUserId = '';
+		this.loggedUserName = '';
+		this.toUserId = '';
+		this.toUserName = '';
+
+		this.TOUSERNAME = 'toUserName';
+	}
+
+	setLoggedUserId(id) {
+		this.loggedUserId = id;
+	}
+	setLoggedUserName(name) {
+		this.loggedUserName = name;
+	}
+	setToUserId(id) {
+		this.toUserId = id;
+	}
+	setToUserName(name) {
+		this.toUserName = name;
+	}
+}
+
+let ds = new Ds();
+
+
+
 $(document).ready(function () {
+
+	// dnp udpate datastore object
+	ds.setLoggedUserId(getUserData('loggeduserid'));
+	ds.setLoggedUserName(getUserData('loggedusername'));
+	//ds.setToUserId(getUserData('touserid'));
+
 	// load first page
 	//$('#showContacts')[0].click();
 	updateUserChat();
@@ -63,7 +100,16 @@ $(document).ready(function () {
 		$(".chatMessage").attr('id', 'chatMessage' + to_user_id);
 		$(".chatButton").attr('id', 'chatButton' + to_user_id);
 
-		// dnp save the current buddy
+		//dnp save to datastore
+		ds.setToUserId(to_user_id);
+
+		// dnp TBD would be a good place to update database 
+		// chat_users.current_session = to_user_id for userid (loggedUserId)
+		// also add typing status to chat_users
+		loadUserDetails(to_user_id, ds.TOUSERNAME);
+		saveBuddyId(ds.loggedUserId, to_user_id);
+
+		// dnp save the current buddy to DOM
 		setUserData({
 			attr: "touserid",
 			value: to_user_id
@@ -130,6 +176,10 @@ $(document).ready(function () {
 		const tu = getUserData('touserid');
 
 		var is_type = 'yes';
+
+		// dnp test saving typing status 
+		saveTypingStatus(is_type, ds.loggedUserId);
+
 		$.ajax({
 			url: "chat_action.php",
 			method: "POST",
@@ -150,6 +200,10 @@ $(document).ready(function () {
 		const tu = getUserData('touserid');
 
 		var is_type = 'no';
+
+		// dnp test saving typing status 
+		saveTypingStatus(is_type, ds.loggedUserId);
+
 		$.ajax({
 			url: "chat_action.php",
 			method: "POST",
@@ -165,8 +219,9 @@ $(document).ready(function () {
 	});
 });
 
-// hash for conversation message to prevent large data downloads every request
-let prevHash = '';
+
+
+
 
 
 // dnp playing with meta-data datasets
@@ -207,6 +262,81 @@ function getUserData(attr) {
 // 	sendMessage(to_user_id);
 // }
 
+// dnp get user details based on userid
+function loadUserDetails(userId, action) {
+	$.ajax({
+		url: "chat_action.php",
+		method: "POST",
+		dataType: "json",
+		data: {
+			userid: userId,
+			action: 'get_user_details'
+		},
+		success: function (response) {
+			var user = response[0];
+
+
+			// store username in ds object
+			if (action == ds.TOUSERNAME) {
+				ds.setToUserName(user.username);
+			}
+
+		}
+	});
+}
+
+// dnp save the contact the loggedUser is chatting with
+function saveBuddyId(loggedUserId, buddyId) {
+	$.ajax({
+		url: "chat_action.php",
+		method: "POST",
+		dataType: "json",
+		data: {
+			loggedUserId: loggedUserId,
+			buddyId: buddyId,
+			action: 'save_buddy_id'
+		},
+		success: function (response) {
+
+
+		}
+	});
+}
+
+// dnp save typing status for loggedUser
+function saveTypingStatus(status, loggedUserId) {
+	$.ajax({
+		url: "chat_action.php",
+		method: "POST",
+		data: {
+			is_type: status,
+			loggedUserId: loggedUserId,
+			action: 'save_typing_status'
+		},
+		success: function () {
+
+		}
+	});
+}
+
+// dnp get the status on one typing
+function loadTypingStatus(loggedUserId, buddyId) {
+	$.ajax({
+		url: "chat_action.php",
+		method: "POST",
+		data: {
+			loggedUserId: loggedUserId,
+			buddyId: buddyId,
+			action: 'load_typing_status'
+		},
+		dataType: "json",
+		success: function (response) {
+			$('#isTyping').html(response.message);
+
+		}
+	});
+}
+
 // get user list from server -- seems to only update the status of users
 function updateUserList() {
 	$.ajax({
@@ -246,14 +376,14 @@ function sendMessage(to_user_id) {
 		data: {
 			to_user_id: to_user_id,
 			chat_message: message,
-			hash: prevHash,
+			hash: ds.conversationHash,
 			action: 'insert_chat'
 		},
 		dataType: "json",
 		success: function (response) {
 			// dnp hash
 			// this hash should always be new because we just sent a new message
-			prevHash = response.hash;
+			ds.conversationHash = response.hash;
 
 			$('#conversationSection').html(response.conversation);
 
@@ -290,7 +420,7 @@ function showUserChat(to_user_id) {
 		method: "POST",
 		data: {
 			to_user_id: to_user_id,
-			hash: prevHash,
+			hash: ds.conversationHash,
 			action: 'show_chat'
 		},
 		dataType: "json",
@@ -299,7 +429,7 @@ function showUserChat(to_user_id) {
 			let hash = response.hash;
 
 			// only update page if hash is new
-			if (hash != prevHash) {
+			if (hash != ds.conversationHash) {
 				// user info part
 				$('#userSection').html(response.userSection);
 				// message chat conversation part
@@ -308,7 +438,7 @@ function showUserChat(to_user_id) {
 				$('#unread_' + to_user_id).html('');
 
 				scrollPageToBottom();
-				prevHash = hash;
+				ds.conversationHash = hash;
 			}
 		}
 	});
@@ -323,7 +453,7 @@ function updateUserChat() {
 			method: "POST",
 			data: {
 				to_user_id: to_user_id,
-				hash: prevHash,
+				hash: ds.conversationHash,
 				action: 'update_user_chat'
 			},
 			dataType: "json",
@@ -332,10 +462,10 @@ function updateUserChat() {
 				let hash = response.hash;
 				//console.log('updateUserChat hash = ' + hash);
 				// only update page if hash is new
-				if (hash != prevHash) {
+				if (hash != ds.conversationHash) {
 					$('#conversationSection').html(response.conversation);
 					scrollPageToBottom();
-					prevHash = hash;
+					ds.conversationHash = hash;
 				}
 			}
 		});
@@ -380,20 +510,13 @@ function showTypingStatus() {
 	});
 	const test = getUserData('hey');
 
-	//const un = user_data.dataset.loggedusername;
-	// const ui = user_data.dataset.loggeduserid;
-	// const tu = user_data.dataset.touserid;
-	// const tn = user_data.dataset.tousername;
-
-	// const un2 = $('#loggedusername').attr('data');
-	// const ui2 = $('#loggeduserid').attr('data');
-	// const tu2 = $('#touserid').attr('data');
-	//console.log('un= ' + un + ' ui= ' + ui + ' tu= ' + tu);
-
 
 	$('li.contact.active').each(function () {
 		var to_user_id = $(this).attr('data-touserid');
 		const tu = getUserData('loggeduserid');
+
+		// dnp test get status of typing
+		loadTypingStatus(ds.loggedUserId, ds.toUserId);
 
 		$.ajax({
 			url: "chat_action.php",

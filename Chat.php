@@ -273,7 +273,7 @@ class Chat
 			WHERE sender_userid = '" . $to_user_id . "' AND reciever_userid = '" . $from_user_id . "' AND status = '1'";
         mysqli_query($this->dbConnect, $sqlUpdate);
 
-        // update users current chat session
+        // update users current chat session, so... current_session is buddy_id
         $sqlUserUpdate = "
 			UPDATE " . $this->chatUsersTable . "
 			SET current_session = '" . $to_user_id . "'
@@ -310,7 +310,7 @@ class Chat
 			UPDATE " . $this->chatLoginDetailsTable . "
 			SET is_typing = '" . $is_type . "' , buddy_id = '" . $buddyId . "'
             WHERE id = '" . $loginDetailsId . "'";
-        error_log($sqlUpdate);
+        //error_log($sqlUpdate);
         mysqli_query($this->dbConnect, $sqlUpdate);
     }
 
@@ -365,7 +365,7 @@ class Chat
         }
     }
 
-    // get last activity time for user
+    // get last activity time for loggedInUser
     public function getUserListDetails($loggedInUserId)
     {
 
@@ -451,6 +451,44 @@ class Chat
 
         echo $out;
 
+    }
+
+    // dnp save buddyId
+    public function saveBuddyId($loggedUserId, $buddyId)
+    {
+        $sqlUpdate = "
+			UPDATE " . $this->chatUsersTable . "
+			SET buddy_id = '" . $buddyId . "'
+            WHERE userid = '" . $loggedUserId . "'";
+        // error_log($sqlUpdate);
+        mysqli_query($this->dbConnect, $sqlUpdate);
+    }
+
+    // dnp save typing status
+    public function saveTypingStatus($is_type, $loggedUserId)
+    {
+        $sqlUpdate = "
+			UPDATE " . $this->chatUsersTable . "
+			SET is_typing = '" . $is_type . "'
+            WHERE userid = '" . $loggedUserId . "'";
+        //error_log($sqlUpdate);
+        mysqli_query($this->dbConnect, $sqlUpdate);
+    }
+
+    // dnp get typing status for buddy to see if they are typing to loggedUser
+    public function loadTypingStatus($loggedUserId, $buddyId)
+    {
+        $sqlQuery = "
+		SELECT is_typing FROM " . $this->chatUsersTable . "
+        WHERE userid = '" . $buddyId . "' AND buddy_id = '" . $loggedUserId . "'";
+        $result = $this->getData($sqlQuery);
+        $output = '';
+        foreach ($result as $row) {
+            if ($row["is_typing"] == 'yes') {
+                $output = 'Typing';
+            }
+        }
+        return $output;
     }
 
 }

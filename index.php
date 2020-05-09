@@ -91,7 +91,7 @@ include 'header.php';
         <!-- https://jsfiddle.net/5qeyju7v/ -->
         <!-- Contacts modal panel -->
         <!-- class="modal fade animate" -->
-        <div id="contactsPanel" class="modal " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div id="contactsPanel" class="modal col-sm-4  " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content ">
 
@@ -132,10 +132,10 @@ include 'header.php';
         <!-- end Contacts modal panel -->
 
         <div id="right2" class="container">
-            <div class="row ">
+            <div class="row d-flex justify-content-center">
 
                 <!-- Right Column -->
-                <div id="right" class="col-sm-8 p-0 dnp-bg-screen ">
+                <div id="right" class="col-sm-4 p-0 dnp-bg-screen ">
 
                     <!-- Header area -->
                     <div class="col-lg-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">

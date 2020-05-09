@@ -41,6 +41,14 @@ if ($_POST['action'] == 'update_user_chat') {
 
 }
 
+// get user details like name, etc.
+if ($_POST['action'] == 'get_user_details') {
+
+    $result = $chat->getUserDetails($_POST['userid']);
+    echo json_encode($result);
+
+}
+
 // get unread message count
 if ($_POST['action'] == 'update_unread_message') {
     $count = $chat->getUnreadMessageCount($_POST['to_user_id'], $_SESSION['userid']);
@@ -58,6 +66,25 @@ if ($_POST['action'] == 'update_typing_status') {
 // get typing status
 if ($_POST['action'] == 'show_typing_status') {
     $message = $chat->fetchIsTypeStatus($_POST['to_user_id'], $_POST["buddy_id"]);
+    $data = array(
+        "message" => $message,
+    );
+    echo json_encode($data);
+}
+
+// save buddyId loggedUserId, buddyId
+if ($_POST['action'] == 'save_buddy_id') {
+    $chat->saveBuddyId($_POST["loggedUserId"], $_POST["buddyId"]);
+}
+
+// save typing status
+if ($_POST['action'] == 'save_typing_status') {
+    $chat->saveTypingStatus($_POST["is_type"], $_POST["loggedUserId"]);
+}
+
+// load typing status
+if ($_POST['action'] == 'load_typing_status') {
+    $message = $chat->loadTypingStatus($_POST['loggedUserId'], $_POST["buddyId"]);
     $data = array(
         "message" => $message,
     );
