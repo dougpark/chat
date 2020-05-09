@@ -32,10 +32,10 @@ include 'header.php';
 
 
     <!-- big outer container -->
-    <div class="container px-10 ">
+    <div class="xcontainer px-10 ">
 
         <!-- Navigation Bar -->
-        <nav class="navbar navbar-expand-sm navbar-dark dnp-bg-primary sticky-top px-1">
+        <nav class="navbar  navbar-dark dnp-bg-primary sticky-top px-1">
 
 
 
@@ -91,7 +91,7 @@ include 'header.php';
         <!-- https://jsfiddle.net/5qeyju7v/ -->
         <!-- Contacts modal panel -->
         <!-- class="modal fade animate" -->
-        <div id="contactsPanel" class="modal col-sm-4  " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div id="contactsPanel" class="modal " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content ">
 
@@ -132,19 +132,19 @@ include 'header.php';
         <!-- end Contacts modal panel -->
 
         <div id="right2" class="container">
-            <div class="row d-flex justify-content-center">
+            <div class="row justify-content-center">
 
                 <!-- Right Column -->
-                <div id="right" class="col-sm-4 p-0 dnp-bg-screen ">
+                <div id="right" class="col-lg-6 p-0 dnp-bg-screen ">
 
                     <!-- Header area -->
-                    <div class="col-lg-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
+                    <div class="col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
                         <div id="userSection"  > </div>
 
                     </div>
 
                     <!-- Chat area -->
-                    <div  class="col-lg-12 chatbody ">
+                    <div  class="col-md-12 chatbody ">
 
                         <!-- all conversation messages are generated and html formated from the php code -->
                         <div id="conversationSection"> </div>
