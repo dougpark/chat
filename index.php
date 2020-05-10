@@ -35,16 +35,18 @@ include 'header.php';
     <div class="xcontainer px-10 ">
 
         <!-- Navigation Bar -->
-        <nav class="navbar  navbar-dark dnp-bg-primary sticky-top px-1">
-
-
+        <nav class="navbar  navbar-dark dnp-bg-primary sticky-top mx-auto px-1">
 
             <!-- open contacts modal panel -->
-            <a class="nav-link" id="showContacts" href="#contactsPanel" data-toggle="modal">
+            <a class="nav-link d-flex align-items-center " id="showContacts" href="#contactsPanel" data-toggle="modal">
                 <span class="text-light fas fa-user-friends"></span>
             </a>
 
-            <a class="navbar-brand" href="#"><span class="pl-5 fas fa-comment"></span> Chat</a>
+            <a class="navbar-brand" href="#">
+            <div id="userSection" >
+                <span class="pl-5 fas fa-comment"></span> Chat
+            </div>
+            </a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -138,10 +140,10 @@ include 'header.php';
                 <div id="right" class="col-lg-6 p-0 dnp-bg-screen ">
 
                     <!-- Header area -->
-                    <div class="col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
-                        <div id="userSection"  > </div>
+                    <!-- <div class="fixed-bottom col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
+                        <div id="xxuserSection"  > </div>
 
-                    </div>
+                    </div> -->
 
                     <!-- Chat area -->
                     <div  class="col-md-12 chatbody ">
@@ -149,12 +151,14 @@ include 'header.php';
                         <!-- all conversation messages are generated and html formated from the php code -->
                         <div id="conversationSection"> </div>
                     </div>
-
+                    <!-- <div class=" col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
+                        <div id="xxuserSection"  > </div>
+                    </div> -->
 
                     <!-- https://stackoverflow.com/questions/39784351/bootstrap-4-how-to-make-100-width-search-input-in-navbar -->
                     <!-- As of Bootstrap 4 the Navbar is flexbox so creating a full-width search input is easier. You can simply use w-100 and d-inline utility classes: -->
                     <!-- Send Message area -->
-                    <div class="dnp-bg-screen container p-2" style="height:73px;">
+                    <div class=" dnp-message-footer dnp-bg-screen p-2" >
                     <div id="isTyping" a="_<?php echo $user['userid']; ?>"></div>
                         <div class="input-group messageInput pb-2">
                             <input type="text" class=" form-control chatMessage" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">

@@ -45,6 +45,13 @@
 
 }
 
+
+
+.dnp-message-footer {
+    
+    height: 100px;
+}
+
 /* General Scroll Bars ***********************************************/
 /* width */
 ::-webkit-scrollbar {
@@ -92,6 +99,8 @@
         width: 800px;
     }
 }
+
+
 
 /* Modal styles ********************************************************/
 

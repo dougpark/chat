@@ -251,13 +251,11 @@ class Chat
         foreach ($userDetails as $user) {
             $toUserAvatar = $user['avatar'];
             $userSection = '
-				<div class="pl-2 pt-2 ">
-				<img width="50px" height="50px" src="userpics/' . $user['avatar'] . '" alt=""
-				 class=" float-left rounded-circle" >
-				</div>
-				<div class="">
-				<span class="float-left pl-2 pt-2"> <h3>' . $user['username'] . '</h3></span>
-				</div>
+				<div class="pl-2">
+				<img width="25px" height="25px" src="userpics/' . $user['avatar'] . '" alt=""
+                 class=" float-left rounded-circle" >
+                 <span class="float-left pl-2 my-0"> ' . $user['username'] . '</span>
+
 				';
         }
         // get conversation between me(logged in user) and contact user
@@ -375,6 +373,7 @@ class Chat
         foreach ($loggedUser as $user) {
             $currentSession = $user['current_session'];
             $loggedUserName = $user['username'];
+            $buddyId = $user['buddy_id'];
             $userPic = $user['avatar'];
 
             // dnp trying to set some "variables" that javascript can use
@@ -386,6 +385,7 @@ class Chat
                 . 'data-loggedusername="' . $loggedUserName . '"'
                 . 'data-loggeduserid="' . $_SESSION['userid'] . '"'
                 . 'data-currentsession="' . $user['current_session'] . '"'
+                . 'data-buddyid="' . $buddyId . '"'
                 . 'data-touserid=" "'
                 . 'data-tousername=" "'
                 . '></span>';

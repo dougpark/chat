@@ -7,6 +7,7 @@ class Ds {
 		this.loggedUserName = '';
 		this.toUserId = '';
 		this.toUserName = '';
+		this.buddyId = '';
 
 		this.TOUSERNAME = 'toUserName';
 	}
@@ -20,8 +21,17 @@ class Ds {
 	setToUserId(id) {
 		this.toUserId = id;
 	}
+	setBuddyId(id) {
+		this.buddyId = id;
+	}
+	getBuddyId() {
+		return this.buddyId;
+	}
 	setToUserName(name) {
 		this.toUserName = name;
+	}
+	clearConversationHash() {
+		this.conversationHash = '';
 	}
 }
 
@@ -34,11 +44,14 @@ $(document).ready(function () {
 	// dnp udpate datastore object
 	ds.setLoggedUserId(getUserData('loggeduserid'));
 	ds.setLoggedUserName(getUserData('loggedusername'));
+	ds.setBuddyId(getUserData('buddyid'));
 	//ds.setToUserId(getUserData('touserid'));
 
 	// load first page
 	//$('#showContacts')[0].click();
-	updateUserChat();
+	//updateUserChat();
+	ds.clearConversationHash();
+	showUserChat(ds.getBuddyId());
 	//console.log('document loaded')
 
 	// check for new users every 6 seconds
