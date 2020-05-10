@@ -416,10 +416,10 @@ function scrollDivToBottom(id) {
 
 //dnp https://stackoverflow.com/questions/4249353/jquery-scroll-to-bottom-of-the-page
 function scrollPageToBottom() {
-	var div = document.getElementById('right');
-	var div2 = $('#right2')[0];
+	//var div = document.getElementById('right');
+	//var div2 = $('#right2')[0];
 	var h = $(window).height();
-	var doc = $(document).height();
+	//var doc = $(document).height();
 	$("html, body").animate({
 		scrollTop: $(document).height() - h
 	}, 500);
@@ -543,7 +543,27 @@ function showTypingStatus() {
 			success: function (response) {
 				$('#isTyping').html(response.message);
 				// + to_user_id	
+
 			}
 		});
 	});
+}
+
+// get conversation based on to_user-id
+function getContactListDetails() {
+
+	$.ajax({
+		url: "chat_action.php",
+		method: "POST",
+		data: {
+			action: 'get_contact_list_details'
+		},
+		dataType: "json",
+		success: function (response) {
+			$('#contactlist').html(response);
+
+		}
+
+	});
+
 }

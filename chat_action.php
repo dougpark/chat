@@ -90,3 +90,9 @@ if ($_POST['action'] == 'load_typing_status') {
     );
     echo json_encode($data);
 }
+
+// get html formated contacts list
+if ($_POST['action'] == 'get_contact_list_details') {
+    $message = $chat->getContactListDetails2($_SESSION['userid']);
+    echo json_encode($message);
+}

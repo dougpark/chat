@@ -38,7 +38,8 @@ include 'header.php';
         <nav class="navbar  navbar-dark dnp-bg-primary sticky-top mx-auto px-1">
 
             <!-- open contacts modal panel -->
-            <a class="nav-link d-flex align-items-center " id="showContacts" href="#contactsPanel" data-toggle="modal">
+            <a class="nav-link d-flex align-items-center " id="showContacts" href="#contactsPanel" data-toggle="modal"
+            onclick="getContactListDetails();">
                 <span class="text-light fas fa-user-friends"></span>
             </a>
 
@@ -57,7 +58,7 @@ include 'header.php';
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#contactsPanel" data-toggle="modal">
+                        <a class="nav-link" href="#contactsPanel" data-toggle="modal" onclick="getContactListDetails();">
                             <span class="fas fa-user-friends"></span>
                             Contacts
                         </a>
@@ -120,7 +121,7 @@ include 'header.php';
                         <div id="contactlist" class="  text-dark pt-1 pl-1">
                              <!-- put div here -->
                              <!-- move this to js so can update everytime user opens contacts list -->
-                            <?php $chat->getUserListDetails($_SESSION['userid']);?>
+                            <?php $chat->getContactListDetails($_SESSION['userid']);?>
                         </div>
                     </div>
 
@@ -133,7 +134,7 @@ include 'header.php';
         </div>
         <!-- end Contacts modal panel -->
 
-        <div id="right2" class="container">
+        <div id="right-container" class="container">
             <div class="row justify-content-center">
 
                 <!-- Right Column -->

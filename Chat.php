@@ -363,8 +363,8 @@ class Chat
         }
     }
 
-    // get last activity time for loggedInUser
-    public function getUserListDetails($loggedInUserId)
+    // get all details for contact list
+    public function getContactListDetailsGood($loggedInUserId)
     {
 
         $loggedUser = $this->getUserDetails($_SESSION['userid']);
@@ -381,7 +381,7 @@ class Chat
             // loggedUserid
             // toUserName
             // toUserId
-            echo '<span id="user_data" '
+            $out = '<span id="user_data" '
                 . 'data-loggedusername="' . $loggedUserName . '"'
                 . 'data-loggeduserid="' . $_SESSION['userid'] . '"'
                 . 'data-currentsession="' . $user['current_session'] . '"'
@@ -392,7 +392,7 @@ class Chat
 
         }
 
-        $out = '';
+        //$out = '';
         $out .= '<ul class="contacts">';
         $chatUsers = $this->chatUsers($_SESSION['userid']);
         foreach ($chatUsers as $user) {
@@ -450,6 +450,106 @@ class Chat
         $out .= '</ul>';
 
         echo $out;
+
+    }
+
+    // get all details for contact list
+    // called on initial load
+    public function getContactListDetails($loggedInUserId)
+    {
+
+        echo $this->getContactListDetails2($loggedInUserId);
+
+    }
+
+    // get all details for contact list
+    // called everytime contact list is openend
+    public function getContactListDetails2($loggedInUserId)
+    {
+
+        $loggedUser = $this->getUserDetails($_SESSION['userid']);
+        $currentSession = '';
+        $loggedUserName = '';
+        foreach ($loggedUser as $user) {
+            $currentSession = $user['current_session'];
+            $loggedUserName = $user['username'];
+            $buddyId = $user['buddy_id'];
+            $userPic = $user['avatar'];
+
+            // dnp trying to set some "variables" that javascript can use
+            // loggedUserName
+            // loggedUserid
+            // toUserName
+            // toUserId
+            $out = '<span id="user_data" '
+                . 'data-loggedusername="' . $loggedUserName . '"'
+                . 'data-loggeduserid="' . $_SESSION['userid'] . '"'
+                . 'data-currentsession="' . $user['current_session'] . '"'
+                . 'data-buddyid="' . $buddyId . '"'
+                . 'data-touserid=" "'
+                . 'data-tousername=" "'
+                . '></span>';
+
+        }
+
+        //$out = '';
+        $out .= '<ul class="contacts">';
+        $chatUsers = $this->chatUsers($_SESSION['userid']);
+        foreach ($chatUsers as $user) {
+            $status = 'offline';
+            if ($user['online']) {
+                $status = 'online';
+            } else { $status = 'offline';}
+            $activeUser = '';
+            if ($user['userid'] == $currentSession) {
+                $activeUser = "active";
+            }
+            $lastActivity = $this->getUsersLastConversationDate($_SESSION['userid'], $user['userid']);
+            $lastMessage = $this->getUsersLastMessage($_SESSION['userid'], $user['userid']);
+
+            //$lastActivity = $chat->getUserLastActivity($user['userid']);
+
+            $out .= '<li id="' . $user['userid'] . '" class="left clearfix contact ' . $activeUser . '" data-touserid="' . $user['userid'] . '" data-tousername="' . $user['username'] . '">';
+            $out .= ' <button type="button" data-dismiss="modal" class="text-left btn-block"';
+            $out .= ' style="padding: 0; border: none; background: none;">';
+
+            // contact image
+            //echo '<span class="float-left">';
+            $out .= '<img width="50px" height="50px" 25px, src="userpics/' . $user['avatar'] . '" alt="" class="rounded-circle float-left">';
+            //echo "</span>";
+
+            // TBD contact on-line status
+            $out .= '<span id="status_' . $user['userid'] . '" class="float-left contact-status ' . $status . '"></span>';
+
+            // contact name
+            $out .= '<div class="contacts-body clearfix pr-1">';
+            // echo '<div class="header">';
+            $out .= '<strong class="primary-font">' . $user['username'] . '</strong>';
+
+            // contact un-read message count
+            $out .= '<span id="unread_' . $user['userid'] . '" class="badge badge-pill badge-danger"  >' . $this->getUnreadMessageCount($user['userid'], $_SESSION['userid']) . '</span>';
+
+            // contact is typing
+            $out .= '<small class="float-right text-dark"><span id="xisTyping_' . $user['userid'] . '" class="isTyping"></span></small>';
+
+            //  contact last activity
+            $out .= '<small class="float-right text-dark">';
+            $out .= '<span class="far fa-clock"></span> ' . $lastActivity;
+            $out .= '</small>';
+
+            //  contact last message text
+            $out .= '<p class="text-dark " style="font-size: .75rem">';
+            $out .= $lastMessage;
+            $out .= '</p>';
+
+            // echo '</div>'; // end header
+            $out .= '</div>'; // end contacts-body
+            $out .= '</button>';
+            $out .= '</li>';
+        }
+        $out .= '</ul>';
+
+        return $out;
 
     }
 
