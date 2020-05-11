@@ -549,7 +549,7 @@ function showTypingStatus() {
 	});
 }
 
-// get conversation based on to_user-id
+// get contactlist everytime the modal dialog is opened
 function getContactListDetails() {
 
 	$.ajax({
