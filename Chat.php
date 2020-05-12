@@ -626,17 +626,6 @@ class Chat
 
     }
 
-    // dnp save buddyId
-    public function saveBuddyId2($loggedUserId, $buddyId)
-    {
-        $sqlUpdate = "
-			UPDATE " . $this->chatUsersTable . "
-			SET buddy_id = '" . $buddyId . "'
-            WHERE userid = '" . $loggedUserId . "'";
-        // error_log($sqlUpdate);
-        mysqli_query($this->dbConnect, $sqlUpdate);
-    }
-
     // dnp PDO save buddyID
     public function saveBuddyId($loggedUserId, $buddyId)
     {
@@ -687,17 +676,6 @@ class Chat
 
     }
 
-    // dnp save typing status
-    public function saveTypingStatus2($is_type, $loggedUserId)
-    {
-        $sqlUpdate = "
-			UPDATE " . $this->chatUsersTable . "
-			SET is_typing = '" . $is_type . "'
-            WHERE userid = '" . $loggedUserId . "'";
-        //error_log($sqlUpdate);
-        mysqli_query($this->dbConnect, $sqlUpdate);
-    }
-
     // dnp PDO get typing status for buddy to see if they are typing to loggedUser
     public function loadTypingStatus($loggedUserId, $buddyId)
     {
@@ -723,21 +701,6 @@ class Chat
         return $output;
 
     }
-    // dnp get typing status for buddy to see if they are typing to loggedUser
-    public function loadTypingStatus2($loggedUserId, $buddyId)
-    {
-        $sqlQuery = "
-		SELECT is_typing FROM " . $this->chatUsersTable . "
-        WHERE userid = '" . $buddyId . "' AND buddy_id = '" . $loggedUserId . "'";
-        $result = $this->getData($sqlQuery);
-        $output = '';
-        foreach ($result as $row) {
-            if ($row["is_typing"] == 'yes') {
-                $output = 'Typing';
-            }
-        }
-        return $output;
-    }
 
     // dnp PDO login local user based on cookie uuid
     public function loginWithUUID($uuid)
@@ -752,7 +715,7 @@ class Chat
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
         $result = $stmt->fetchAll();
-        
+
         return $result;
 
     }
