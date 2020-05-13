@@ -88,7 +88,6 @@ class Chat
             // }
 
         }
-
     }
 
     ////////////////////////////////////////////////// end PDO
@@ -156,7 +155,6 @@ class Chat
             $userName = $user['username'];
         }
         return $userName;
-
     }
 
     // get avatar where user = userid
@@ -306,7 +304,9 @@ class Chat
         // dnp hash
         $hash = hash('crc32b', $conversation);
         // if hash matches hash_in then no changes so do not return a big string
-        if ($hash == $hash_in) {$conversation = '';}
+        if ($hash == $hash_in) {
+            $conversation = '';
+        }
         $data = array(
             "conversation" => $conversation,
             "hash" => $hash,
@@ -462,7 +462,6 @@ class Chat
                 . 'data-touserid=" "'
                 . 'data-tousername=" "'
                 . '></span>';
-
         }
 
         //$out = '';
@@ -472,7 +471,9 @@ class Chat
             $status = 'offline';
             if ($user['online']) {
                 $status = 'online';
-            } else { $status = 'offline';}
+            } else {
+                $status = 'offline';
+            }
             $activeUser = '';
             if ($user['userid'] == $currentSession) {
                 $activeUser = "active";
@@ -523,7 +524,6 @@ class Chat
         $out .= '</ul>';
 
         echo $out;
-
     }
 
     // get all details for contact list
@@ -532,7 +532,6 @@ class Chat
     {
 
         echo $this->getContactListDetails2($loggedInUserId);
-
     }
 
     // get all details for contact list
@@ -562,7 +561,6 @@ class Chat
                 . 'data-touserid=" "'
                 . 'data-tousername=" "'
                 . '></span>';
-
         }
 
         //$out = '';
@@ -572,7 +570,9 @@ class Chat
             $status = 'offline';
             if ($user['online']) {
                 $status = 'online';
-            } else { $status = 'offline';}
+            } else {
+                $status = 'offline';
+            }
             $activeUser = '';
             if ($user['userid'] == $currentSession) {
                 $activeUser = "active";
@@ -623,7 +623,6 @@ class Chat
         $out .= '</ul>';
 
         return $out;
-
     }
 
     // dnp PDO save buddyID
@@ -641,7 +640,6 @@ class Chat
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
-
     }
 
     // dnp PDO save login uuid
@@ -657,7 +655,6 @@ class Chat
         ];
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
-
     }
 
     // dnp PDO save typing status
@@ -673,7 +670,6 @@ class Chat
         ];
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
-
     }
 
     // dnp PDO get typing status for buddy to see if they are typing to loggedUser
@@ -699,7 +695,6 @@ class Chat
             }
         }
         return $output;
-
     }
 
     // dnp PDO login local user based on cookie uuid
@@ -717,7 +712,5 @@ class Chat
         $result = $stmt->fetchAll();
 
         return $result;
-
     }
-
 }

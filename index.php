@@ -13,164 +13,161 @@ include 'header.php';
  -->
 
 
-<?php if (isset($_SESSION['userid']) && $_SESSION['userid']) {
+    <?php if (isset($_SESSION['userid']) && $_SESSION['userid']) {
 
-    include 'Chat.php';
-    $chat = new Chat();
+        include 'Chat.php';
+        $chat = new Chat();
 
-    // get loggeduser details
-    $loggedUser = $chat->getUserDetails($_SESSION['userid']);
-    $currentSession = '';
-    $loggedUserName = '';
-    foreach ($loggedUser as $user) {
-        $currentSession = $user['current_session'];
-        $loggedUserName = $user['username'];
-        $userPic = $user['avatar'];
-    }
+        // get loggeduser details
+        $loggedUser = $chat->getUserDetails($_SESSION['userid']);
+        $currentSession = '';
+        $loggedUserName = '';
+        foreach ($loggedUser as $user) {
+            $currentSession = $user['current_session'];
+            $loggedUserName = $user['username'];
+            $userPic = $user['avatar'];
+        }
 
     ?>
 
 
-    <!-- big outer container -->
-    <div class="xcontainer px-10 ">
+        <!-- big outer container -->
+        <div class="xcontainer px-10 ">
 
-        <!-- Navigation Bar -->
-        <nav class="navbar  navbar-dark dnp-bg-primary sticky-top mx-auto px-1">
+            <!-- Navigation Bar -->
+            <nav class="navbar  navbar-dark dnp-bg-primary sticky-top mx-auto px-1">
 
-            <!-- open contacts modal panel -->
-            <a class="nav-link d-flex align-items-center " id="showContacts" href="#contactsPanel" data-toggle="modal"
-            onclick="getContactListDetails();">
-                <span class="text-light fas fa-user-friends"></span>
-            </a>
+                <!-- open contacts modal panel -->
+                <a class="nav-link d-flex align-items-center " id="showContacts" href="#contactsPanel" data-toggle="modal" onclick="getContactListDetails();">
+                    <span class="text-light fas fa-user-friends"></span>
+                </a>
 
-            <a class="navbar-brand" href="#">
-            <div id="userSection" >
-                <span class="pl-5 fas fa-comment"></span> Chat
-            </div>
-            </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- main_nav -->
-            <div class="collapse navbar-collapse" id="main_nav">
-
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contactsPanel" data-toggle="modal" onclick="getContactListDetails();">
-                            <span class="fas fa-user-friends"></span>
-                            Contacts
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href=logout.php>
-                            <span class="fas fa-power-off"></span>
-                            Log Off
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown"> Status </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a class="dropdown-item" href="#"> <span class="fas fa-check-circle">
-                                    </span>
-                                    Available</a></li>
-                            <li><a class="dropdown-item" href="#"> <span class="fas fa-times-circle">
-                                    </span>
-                                    Busy </a></li>
-                            <li><a class="dropdown-item" href="#"> <span class="far fa-clock"></span>
-                                    Away</a></li>
-                            <li class="dropdown-divider"></li>
-
-                        </ul>
-                    </li>
-
-                </ul>
-
-            </div> <!-- end main_nav navbar-collapse.// -->
-        </nav>
-
-        <!-- https://jsfiddle.net/5qeyju7v/ -->
-        <!-- Contacts modal panel -->
-        <!-- class="modal fade animate" -->
-        <div id="contactsPanel" class="modal " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content ">
-
-                    <div class="modal-header">
-
-                        <button type="button" class="pt-1 mr-auto align-baseline" style="padding: 0; border: none; background: none;"
-                            data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="fas fa-chevron-left"></span>
-                        </button>
-
-                        <button type="button" class="ml-auto btn btn-default" data-dismiss="modal">
-                            <div class="p-1 align-middle float-right">
-                            <h3><?php echo $loggedUserName; ?>
-                            </div>
-                            <div>
-                             <?php echo '<img id="profile-img" src="userpics/' . $userPic . '" class="online px-0 align-middle float-right rounded-circle" alt="" style="width: 25%">'; ?>
-                             </h3>
-                            </div>
-                        </button>
+                <a class="navbar-brand" href="#">
+                    <div id="userSection">
+                        <span class="pl-5 fas fa-comment"></span> Chat
                     </div>
+                </a>
 
-                    <div class="modal-body dnp-modal">
-                        <!-- contact list generated from php code  -->
-                        <div id="contactlist" class="  text-dark pt-1 pl-1">
-                             <!-- put div here -->
-                             <!-- move this to js so can update everytime user opens contacts list -->
-                            <?php $chat->getContactListDetails($_SESSION['userid']);?>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- main_nav -->
+                <div class="collapse navbar-collapse" id="main_nav">
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contactsPanel" data-toggle="modal" onclick="getContactListDetails();">
+                                <span class="fas fa-user-friends"></span>
+                                Contacts
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href=logout.php>
+                                <span class="fas fa-power-off"></span>
+                                Log Off
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown"> Status </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a class="dropdown-item" href="#"> <span class="fas fa-check-circle">
+                                        </span>
+                                        Available</a></li>
+                                <li><a class="dropdown-item" href="#"> <span class="fas fa-times-circle">
+                                        </span>
+                                        Busy </a></li>
+                                <li><a class="dropdown-item" href="#"> <span class="far fa-clock"></span>
+                                        Away</a></li>
+                                <li class="dropdown-divider"></li>
+
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                </div> <!-- end main_nav navbar-collapse.// -->
+            </nav>
+
+            <!-- https://jsfiddle.net/5qeyju7v/ -->
+            <!-- Contacts modal panel -->
+            <!-- class="modal fade animate" -->
+            <div id="contactsPanel" class="modal " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content ">
+
+                        <div class="modal-header">
+
+                            <button type="button" class="pt-1 mr-auto align-baseline" style="padding: 0; border: none; background: none;" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="fas fa-chevron-left"></span>
+                            </button>
+
+                            <button type="button" class="ml-auto btn btn-default" data-dismiss="modal">
+                                <div class="p-1 align-middle float-right">
+                                    <h3><?php echo $loggedUserName; ?>
+                                </div>
+                                <div>
+                                    <?php echo '<img id="profile-img" src="userpics/' . $userPic . '" class="online px-0 align-middle float-right rounded-circle" alt="" style="width: 25%">'; ?>
+                                    </h3>
+                                </div>
+                            </button>
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <div class="modal-body dnp-modal">
+                            <!-- contact list generated from php code  -->
+                            <div id="contactlist" class="  text-dark pt-1 pl-1">
+                                <!-- put div here -->
+                                <!-- move this to js so can update everytime user opens contacts list -->
+                                <?php $chat->getContactListDetails($_SESSION['userid']); ?>
+                            </div>
+                        </div>
 
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- end Contacts modal panel -->
+            <!-- end Contacts modal panel -->
 
-        <div id="right-container" class="container">
-            <div class="row justify-content-center">
+            <div id="right-container" class="container">
+                <div class="row justify-content-center">
 
-                <!-- Right Column -->
-                <div id="right" class="col-lg-6 p-0 dnp-bg-screen ">
+                    <!-- Right Column -->
+                    <div id="right" class="col-lg-6 p-0 dnp-bg-screen ">
 
-                    <!-- Header area -->
-                    <!-- <div class="fixed-bottom col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
+                        <!-- Header area -->
+                        <!-- <div class="fixed-bottom col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
                         <div id="xxuserSection"  > </div>
 
                     </div> -->
 
-                    <!-- Chat area -->
-                    <div  class="col-md-12 chatbody ">
+                        <!-- Chat area -->
+                        <div class="col-md-12 chatbody ">
 
-                        <!-- all conversation messages are generated and html formated from the php code -->
-                        <div id="conversationSection"> </div>
-                    </div>
-                    <!-- <div class=" col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
-                        <div id="xxuserSection"  > </div>
-                    </div> -->
-
-                    <!-- https://stackoverflow.com/questions/39784351/bootstrap-4-how-to-make-100-width-search-input-in-navbar -->
-                    <!-- As of Bootstrap 4 the Navbar is flexbox so creating a full-width search input is easier. You can simply use w-100 and d-inline utility classes: -->
-                    <!-- Send Message area -->
-                    <div class=" dnp-message-footer dnp-bg-screen p-2" >
-                    <div id="isTyping" a="_<?php echo $user['userid']; ?>"></div>
-                        <div class="input-group messageInput pb-2">
-                            <input type="text" class=" form-control chatMessage" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
-                            <span class="input-group-append pr-3">
-                                <button class="btn btn-outline-dark chatButton" type="button" id="chatButton<?php echo $currentSession; ?>">Send</button>
-                            </span>
+                            <!-- all conversation messages are generated and html formated from the php code -->
+                            <div id="conversationSection"> </div>
                         </div>
-                    </div>
+                        <!-- <div class=" col-md-12 dnp-bg-screen border board-bottom-1 pl-2 pt-1" style=" height:100px; ">
+                        <div id="xxuserSection"  > </div>
+                    </div> -->
+
+                        <!-- https://stackoverflow.com/questions/39784351/bootstrap-4-how-to-make-100-width-search-input-in-navbar -->
+                        <!-- As of Bootstrap 4 the Navbar is flexbox so creating a full-width search input is easier. You can simply use w-100 and d-inline utility classes: -->
+                        <!-- Send Message area -->
+                        <div class=" dnp-message-footer dnp-bg-screen p-2">
+                            <div id="isTyping" a="_<?php echo $user['userid']; ?>"></div>
+                            <div class="input-group messageInput pb-2">
+                                <input type="text" class=" form-control chatMessage" id="chatMessage<?php echo $currentSession; ?>" placeholder="...">
+                                <span class="input-group-append pr-3">
+                                    <button class="btn btn-outline-dark chatButton" type="button" id="chatButton<?php echo $currentSession; ?>">Send</button>
+                                </span>
+                            </div>
+                        </div>
 
 
-                    <!-- <form class="mx-2 my-auto d-inline w-100">
+                        <!-- <form class="mx-2 my-auto d-inline w-100">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="...">
                         <span class="input-group-append">
@@ -179,7 +176,7 @@ include 'header.php';
                     </div>
                 </form> -->
 
-                    <!-- <div class="dnp-bg-header3" style="height:53px;">
+                        <!-- <div class="dnp-bg-header3" style="height:53px;">
                 <div class="input-group p-2">
                     <input id="btn-input" type="text" class="form-control input-sm"
                         placeholder="Type your message here...">
@@ -190,22 +187,25 @@ include 'header.php';
                 </div>
             </div> -->
 
-                </div>
+                    </div>
 
-            </div> <!-- end right col -->
-        </div> <!-- end row -->
+                </div> <!-- end right col -->
+            </div> <!-- end row -->
 
-    </div><!-- end of outside div -->
+        </div><!-- end of outside div -->
 
-<?php } else {?>
-		<br>
-		<br>
-        <script> window.location.replace("login.php");
+    <?php } else { ?>
+        <br>
+        <br>
+        <script>
+            window.location.replace("login.php");
         </script>
-		<strong><a href="login.php"><h3>Chat Login</h3></a></strong>
-	<?php }?>
+        <strong><a href="login.php">
+                <h3>Chat Login</h3>
+            </a></strong>
+    <?php } ?>
 
-<?php include 'footer.php';?>
+    <?php include 'footer.php'; ?>
 
 
     <!-- local js code -->
@@ -219,13 +219,13 @@ include 'header.php';
         let fadeOut = 'dnp-animate-left-out';
 
         // On show
-        $('#contactsPanel').on('show.bs.modal', function () {
+        $('#contactsPanel').on('show.bs.modal', function() {
             $(this).removeClass(fadeOut);
             $(this).addClass(fadeIn);
         });
 
         // On closing
-        $('#contactsPanel').on('hide.bs.modal', function (e) {
+        $('#contactsPanel').on('hide.bs.modal', function(e) {
             let $this = $(this);
 
             // Check whether the fade in class still exists in this modal
@@ -237,7 +237,7 @@ include 'header.php';
                 $this.addClass(fadeOut);
                 e.preventDefault();
 
-                setTimeout(function () {
+                setTimeout(function() {
                     $this.modal('hide');
                 }, 395); // the default delays from animate.css is 1s
             }

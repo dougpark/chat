@@ -8,52 +8,51 @@ $chat = new Chat();
 $cookie_name = 'login_uuid';
 if (!isset($_COOKIE[$cookie_name])) {
 } else {
-    // cookie already set
-    // get login info from DB here
-    $user = $chat->loginWithUUID($_COOKIE[$cookie_name]);
-    loginUser($user);
+	// cookie already set
+	// get login info from DB here
+	$user = $chat->loginWithUUID($_COOKIE[$cookie_name]);
+	loginUser($user);
 }
 
 // called with valid user object
 function loginUser($user)
 {
-    global $chat, $cookie_name;
+	global $chat, $cookie_name;
 
-    $_SESSION['username'] = $user[0]['username'];
-    $_SESSION['userid'] = $user[0]['userid'];
-    $chat->updateUserOnline($user[0]['userid'], 1);
+	$_SESSION['username'] = $user[0]['username'];
+	$_SESSION['userid'] = $user[0]['userid'];
+	$chat->updateUserOnline($user[0]['userid'], 1);
 
-// set login_uuid to cookie and to DB
-    $uuid = UUID::v4();
-    setcookie($cookie_name, $uuid, time() + (86400 * 365), "/"); // 86400 = 1 day
-    $chat->saveLoginUUID($user[0]['userid'], $uuid);
+	// set login_uuid to cookie and to DB
+	$uuid = UUID::v4();
+	setcookie($cookie_name, $uuid, time() + (86400 * 365), "/"); // 86400 = 1 day
+	$chat->saveLoginUUID($user[0]['userid'], $uuid);
 
-    $lastInsertId = $chat->insertUserLoginDetails($user[0]['userid']);
-//error_log('lastInsertId= ' . $lastInsertId);
-    $_SESSION['login_details_id'] = $lastInsertId;
+	$lastInsertId = $chat->insertUserLoginDetails($user[0]['userid']);
+	//error_log('lastInsertId= ' . $lastInsertId);
+	$_SESSION['login_details_id'] = $lastInsertId;
 
-    header("Location:index.php");
-
+	header("Location:index.php");
 }
 
 // login with form username and password
 $loginError = '';
 if (!empty($_POST['username']) && !empty($_POST['pwd'])) {
 
-    $user = $chat->loginUsers($_POST['username'], $_POST['pwd']);
-    if (!empty($user)) {
-        loginUser($user);
-
-    } else {
-        $loginError = "Invalid username or password!";
-    }
+	$user = $chat->loginUsers($_POST['username'], $_POST['pwd']);
+	if (!empty($user)) {
+		loginUser($user);
+	} else {
+		$loginError = "Invalid username or password!";
+	}
 }
 
 include './header.php';
 
 ?>
 <title>Chat</title>
-<?php //include('./container.php');?>
+<?php //include('./container.php');
+?>
 <div class="container">
 	<h2 class="align-center">Chat</h2>
 	<div class="row">
@@ -61,9 +60,9 @@ include './header.php';
 			<h4>Login:</h4>
 			<form method="post">
 				<div class="form-group">
-				<?php if ($loginError) {?>
-					<div class="alert alert-warning"><?php echo $loginError; ?></div>
-				<?php }?>
+					<?php if ($loginError) { ?>
+						<div class="alert alert-warning"><?php echo $loginError; ?></div>
+					<?php } ?>
 				</div>
 				<div class="form-group">
 					<label for="username">User:</label>
@@ -84,10 +83,4 @@ include './header.php';
 
 	</div>
 </div>
-<?php include './footer.php';?>
-
-
-
-
-
-
+<?php include './footer.php'; ?>
