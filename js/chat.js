@@ -210,27 +210,29 @@ $(document).ready(function () {
 	// send typing status to server for logged-in user to No
 	$(document).on('blur', '.messageInput', function () {
 
-		const tu = getUserData('touserid');
+		//const tu = getUserData('touserid');
 
 		var is_type = 'no';
 
 		// dnp test saving typing status 
 		saveTypingStatus(is_type, ds.loggedUserId);
 
-	// 	$.ajax({
-	// 		url: "chat_action.php",
-	// 		method: "POST",
-	// 		data: {
-	// 			is_type: is_type,
-	// 			buddy_id: tu,
-	// 			action: 'update_typing_status'
-	// 		},
-	// 		success: function () {
+		// 	$.ajax({
+		// 		url: "chat_action.php",
+		// 		method: "POST",
+		// 		data: {
+		// 			is_type: is_type,
+		// 			buddy_id: tu,
+		// 			action: 'update_typing_status'
+		// 		},
+		// 		success: function () {
 
-	// 		}
-	// 	});
-	// });
-});
+		// 		}
+		// 	});
+		// });
+	});
+
+}); // end of document ready
 
 
 
