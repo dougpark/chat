@@ -45,6 +45,7 @@ class Chat
         \PDO::ATTR_EMULATE_PREPARES => false,
     ];
 
+    // dnp PDO the future is PDO -- use this now
     public function connectPDO()
     {
         $dsn = "mysql:host={$this->host};dbname={$this->db};charset={$this->charset};port={$this->port}";
@@ -374,32 +375,64 @@ class Chat
         return $output;
     }
 
-    // set/update typing status
-    public function updateTypingStatus($is_type, $loginDetailsId, $buddyId)
-    {
-        $sqlUpdate = "
-			UPDATE " . $this->chatLoginDetailsTable . "
-			SET is_typing = '" . $is_type . "' , buddy_id = '" . $buddyId . "'
-            WHERE id = '" . $loginDetailsId . "'";
-        //error_log($sqlUpdate);
-        mysqli_query($this->dbConnect, $sqlUpdate);
-    }
+    // dnp PDO set/update typing status
+    // public function updateTypingStatus($is_type, $loginDetailsId, $buddyId)
+    // {
+    //     $sql = "UPDATE {$this->chatLoginDetailsTable}
+    // 		    SET is_typing = :is_typing,
+    //                 buddy_id = :buddy_id
+    //             WHERE id = :id";
+
+    //     $data = [
+    //         'is_typing' => $is_type,
+    //         'buddy_id' => $buddyId,
+    //         'id' => $loginDetailsId,
+    //     ];
+    //     $stmt = $this->pdo->prepare($sql);
+    //     $stmt->execute($data);
+    // }
+
+    // dnp PDO get typing status for buddy to see if they are typing to loggedUser
+    // public function fetchIsTypeStatus($loggedUserId, $buddyId)
+    // {
+    //     $sql = "SELECT is_typing, buddy_id FROM {$this->chatLoginDetailsTable}
+    //             WHERE userid = :userid AND buddy_id = :buddy_id
+    //             ORDER BY last_activity DESC LIMIT 1";
+    //     $data = [
+    //         'userid' => $loggedUserId,
+    //         'buddy_id' => $buddyId,
+    //     ];
+    //     $stmt = $this->pdo->prepare($sql);
+    //     $stmt->execute($data);
+
+    //     $result = $stmt->fetchAll();
+    //     // go through all the returned rows
+    //     $output = '';
+    //     foreach ($result as $row) {
+    //         $is_typing = $row['is_typing'];
+    //         //error_log("is_typing= $is_typing");
+    //         if ($is_typing == 'yes') {
+    //             $output = 'Typing';
+    //         }
+    //     }
+    //     return $output;
+    // }
 
     // get typing status
-    public function fetchIsTypeStatus($userId, $buddyId)
-    {
-        $sqlQuery = "
-		SELECT is_typing, buddy_id FROM " . $this->chatLoginDetailsTable . "
-		WHERE userid = '" . $userId . "' ORDER BY last_activity DESC LIMIT 1";
-        $result = $this->getData($sqlQuery);
-        $output = '';
-        foreach ($result as $row) {
-            if ($row["is_typing"] == 'yes' and $row["buddy_id"] == $buddyId) {
-                $output = 'Typing';
-            }
-        }
-        return $output;
-    }
+    // public function fetchIsTypeStatus2($userId, $buddyId)
+    // {
+    //     $sqlQuery = "
+    // 	SELECT is_typing, buddy_id FROM " . $this->chatLoginDetailsTable . "
+    // 	WHERE userid = '" . $userId . "' ORDER BY last_activity DESC LIMIT 1";
+    //     $result = $this->getData($sqlQuery);
+    //     $output = '';
+    //     foreach ($result as $row) {
+    //         if ($row["is_typing"] == 'yes' and $row["buddy_id"] == $buddyId) {
+    //             $output = 'Typing';
+    //         }
+    //     }
+    //     return $output;
+    // }
 
     // set/update login status
     public function insertUserLoginDetails($userId)
@@ -671,7 +704,6 @@ class Chat
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
-
     // dnp PDO get typing status for buddy to see if they are typing to loggedUser
     public function loadTypingStatus($loggedUserId, $buddyId)
     {
@@ -696,6 +728,7 @@ class Chat
         }
         return $output;
     }
+
 
     // dnp PDO login local user based on cookie uuid
     public function loginWithUUID($uuid)

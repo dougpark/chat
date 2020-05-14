@@ -38,7 +38,6 @@ if ($_POST['action'] == 'update_user_chat') {
     // echo json_encode($data);
     // dnp hash
     echo json_encode($result);
-
 }
 
 // get user details like name, etc.
@@ -46,7 +45,6 @@ if ($_POST['action'] == 'get_user_details') {
 
     $result = $chat->getUserDetails($_POST['userid']);
     echo json_encode($result);
-
 }
 
 // get unread message count
@@ -59,18 +57,18 @@ if ($_POST['action'] == 'update_unread_message') {
 }
 
 // update typing status
-if ($_POST['action'] == 'update_typing_status') {
-    $chat->updateTypingStatus($_POST["is_type"], $_SESSION["login_details_id"], $_POST["buddy_id"]);
-}
+// if ($_POST['action'] == 'update_typing_status') {
+//     $chat->updateTypingStatus($_POST["is_type"], $_SESSION["login_details_id"], $_POST["buddy_id"]);
+// }
 
 // get typing status
-if ($_POST['action'] == 'show_typing_status') {
-    $message = $chat->fetchIsTypeStatus($_POST['to_user_id'], $_POST["buddy_id"]);
-    $data = array(
-        "message" => $message,
-    );
-    echo json_encode($data);
-}
+// if ($_POST['action'] == 'show_typing_status') {
+//     $message = $chat->fetchIsTypeStatus($_POST['to_user_id'], $_POST["buddy_id"]);
+//     $data = array(
+//         "message" => $message,
+//     );
+//     echo json_encode($data);
+// }
 
 // save buddyId loggedUserId, buddyId
 if ($_POST['action'] == 'save_buddy_id') {

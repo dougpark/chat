@@ -193,18 +193,18 @@ $(document).ready(function () {
 		// dnp test saving typing status 
 		saveTypingStatus(is_type, ds.loggedUserId);
 
-		$.ajax({
-			url: "chat_action.php",
-			method: "POST",
-			data: {
-				is_type: is_type,
-				buddy_id: tu,
-				action: 'update_typing_status'
-			},
-			success: function () {
+		// $.ajax({
+		// 	url: "chat_action.php",
+		// 	method: "POST",
+		// 	data: {
+		// 		is_type: is_type,
+		// 		buddy_id: tu,
+		// 		action: 'update_typing_status'
+		// 	},
+		// 	success: function () {
 
-			}
-		});
+		// 	}
+		// });
 	});
 
 	// send typing status to server for logged-in user to No
@@ -217,19 +217,19 @@ $(document).ready(function () {
 		// dnp test saving typing status 
 		saveTypingStatus(is_type, ds.loggedUserId);
 
-		$.ajax({
-			url: "chat_action.php",
-			method: "POST",
-			data: {
-				is_type: is_type,
-				buddy_id: tu,
-				action: 'update_typing_status'
-			},
-			success: function () {
+	// 	$.ajax({
+	// 		url: "chat_action.php",
+	// 		method: "POST",
+	// 		data: {
+	// 			is_type: is_type,
+	// 			buddy_id: tu,
+	// 			action: 'update_typing_status'
+	// 		},
+	// 		success: function () {
 
-			}
-		});
-	});
+	// 		}
+	// 	});
+	// });
 });
 
 
@@ -531,21 +531,22 @@ function showTypingStatus() {
 		// dnp test get status of typing
 		loadTypingStatus(ds.loggedUserId, ds.toUserId);
 
-		$.ajax({
-			url: "chat_action.php",
-			method: "POST",
-			data: {
-				to_user_id: to_user_id,
-				buddy_id: tu,
-				action: 'show_typing_status'
-			},
-			dataType: "json",
-			success: function (response) {
-				$('#isTyping').html(response.message);
-				// + to_user_id	
+		// disable the original way to get typing status
+		// $.ajax({
+		// 	url: "chat_action.php",
+		// 	method: "POST",
+		// 	data: {
+		// 		to_user_id: to_user_id,
+		// 		buddy_id: tu,
+		// 		action: 'show_typing_status'
+		// 	},
+		// 	dataType: "json",
+		// 	success: function (response) {
+		// 		$('#isTyping').html(response.message);
+		// 		// + to_user_id	
 
-			}
-		});
+		// 	}
+		// });
 	});
 }
 
