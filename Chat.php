@@ -316,7 +316,7 @@ class Chat
         return $data;
     }
 
-    // get touser details and conversation formated for direct insert into html page
+    // get touser details and conversation formated for direct nsert into html page
     public function showUserChat($from_user_id, $to_user_id, $hash_in)
     {
         // get details about contact user
@@ -434,40 +434,96 @@ class Chat
     //     return $output;
     // }
 
-    // set/update login status
+    // dnp PDO insert login status
     public function insertUserLoginDetails($userId)
     {
-        $sqlInsert = "
-			INSERT INTO " . $this->chatLoginDetailsTable . " (userid)
-			VALUES ('" . $userId . "')";
-        //error_log('insert sql= ' . $sqlInsert);
 
-        mysqli_query($this->dbConnect, $sqlInsert);
-        $lastInsertId = mysqli_insert_id($this->dbConnect);
+        $sql = "INSERT INTO {$this->chatLoginDetailsTable}
+                (userid)
+                VALUES (:userid)";
+
+        $data = [
+            'userid' => $userId,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $lastInsertId = $this->pdo->lastInsertId();
         return $lastInsertId;
     }
 
-    // set last activity time for user
+    // set/update login status
+    // public function insertUserLoginDetails2($userId)
+    // {
+    //     $sqlInsert = "
+    // 		NSERT INTO " . $this->chatLoginDetailsTable . " (userid)
+    // 		VALUES ('" . $userId . "')";
+    //     //error_log('insert sql= ' . $sqlInsert);
+
+    //     mysqli_query($this->dbConnect, $sqlInsert);
+    //     $lastInsertId = mysqli_insert_id($this->dbConnect);
+    //     // PDO $id = $db->pdo->lastInsertId();
+    //     return $lastInsertId;
+    // }
+
+    // dnp PDO set last activity time for user
     public function updateLastActivity($loginDetailsId)
     {
-        $sqlUpdate = "
-			UPDATE " . $this->chatLoginDetailsTable . "
-			SET last_activity = now()
-			WHERE id = '" . $loginDetailsId . "'";
-        mysqli_query($this->dbConnect, $sqlUpdate);
+        // update loggedUser
+        $sql = "UPDATE {$this->chatLoginDetailsTable}
+                SET last_activity = now()
+                WHERE id = :id";
+
+        $data = [
+            'id' => $loginDetailsId,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
     }
 
-    // get last activity time for user
+    // set last activity time for user
+    // public function updateLastActivity2($loginDetailsId)
+    // {
+    //     $sqlUpdate = "
+    // 		UPDATE " . $this->chatLoginDetailsTable . "
+    // 		SET last_activity = now()
+    // 		WHERE id = '" . $loginDetailsId . "'";
+    //     mysqli_query($this->dbConnect, $sqlUpdate);
+    // }
+    // dnp PDO set last activity time for user
     public function getUserLastActivity($userId)
     {
-        $sqlQuery = "
-			SELECT last_activity FROM " . $this->chatLoginDetailsTable . "
-			WHERE userid = '$userId' ORDER BY last_activity DESC LIMIT 1";
-        $result = $this->getData($sqlQuery);
+        // update loggedUser
+        $sql = "SELECT last_activity FROM {$this->chatLoginDetailsTable}
+                WHERE userid = :userid
+                ORDER BY last_activity DESC LIMIT 1";
+
+        $data = [
+            'userid' => $userId,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+
+        $result = $stmt->fetchAll();
+        // go through all the returned rows
         foreach ($result as $row) {
             return $row['last_activity'];
         }
     }
+
+    // get last activity time for user
+    // public function getUserLastActivity2($userId)
+    // {
+    //     $sqlQuery = "
+    // 		SELECT last_activity FROM " . $this->chatLoginDetailsTable . "
+    // 		WHERE userid = '$userId' ORDER BY last_activity DESC LIMIT 1";
+    //     $result = $this->getData($sqlQuery);
+    //     foreach ($result as $row) {
+    //         return $row['last_activity'];
+    //     }
+    // }
 
     // get all details for contact list
     public function getContactListDetailsGood($loggedInUserId)

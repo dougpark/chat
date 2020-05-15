@@ -186,7 +186,7 @@ $(document).ready(function () {
 	$(document).on('focus', '.messageInput', function () {
 		//dnp get to_user_id here
 		// send to update typing to_user_id
-		const tu = getUserData('touserid');
+		//const tu = getUserData('touserid');
 
 		var is_type = 'yes';
 
@@ -385,27 +385,56 @@ function sendMessage(to_user_id) {
 	if ($.trim(message) == '') {
 		return false;
 	}
-	$.ajax({
-		url: "chat_action.php",
-		method: "POST",
-		data: {
-			to_user_id: to_user_id,
-			chat_message: message,
-			hash: ds.conversationHash,
-			action: 'insert_chat'
-		},
-		dataType: "json",
-		success: function (response) {
-			// dnp hash
-			// this hash should always be new because we just sent a new message
-			ds.conversationHash = response.hash;
 
-			$('#conversationSection').html(response.conversation);
+	// check for command
+	let command = false;
 
-			scrollPageToBottom();
+	if (message[0] == ';') { //command
+		command = true;
+		$.ajax({
+			url: "cmd_action.php",
+			method: "POST",
+			data: {
+				command: message,
+				action: 'run_command'
+			},
+			dataType: "json",
+			success: function (response) {
+				// dnp hash
+				// this hash should always be new because we just sent a new message
+				ds.conversationHash = response.hash;
 
-		}
-	});
+				$('#conversationSection').html(response.conversation);
+
+				scrollPageToBottom();
+
+			}
+		});
+	} else { // normal message
+
+		$.ajax({
+			url: "chat_action.php",
+			method: "POST",
+			data: {
+				to_user_id: to_user_id,
+				chat_message: message,
+				hash: ds.conversationHash,
+				command: command,
+				action: 'insert_chat'
+			},
+			dataType: "json",
+			success: function (response) {
+				// dnp hash
+				// this hash should always be new because we just sent a new message
+				ds.conversationHash = response.hash;
+
+				$('#conversationSection').html(response.conversation);
+
+				scrollPageToBottom();
+
+			}
+		});
+	}
 }
 
 //dnp https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div
