@@ -10,27 +10,7 @@ class Chat
     private $chatTable = 'chat';
     private $chatUsersTable = 'chat_users';
     private $chatLoginDetailsTable = 'chat_login_details';
-    private $dbConnect = false;
 
-    public function __construct()
-    {
-        if (!$this->dbConnect) {
-            $conn = new mysqli($this->host, $this->user, $this->password, $this->database);
-            if ($conn->connect_error) {
-                die("Error failed to connect to MySQL: " . $conn->connect_error);
-            } else {
-                $this->dbConnect = $conn;
-            }
-        }
-
-        $this->connectPDO();
-
-        // $uuid = UUID::v4();
-        // error_log($uuid);
-
-    }
-
-    //////////////////////////////////////////////////////////// begin PDO
     //private $host = '127.0.0.1';
     private $db = 'phpzag_demo';
     //private $user = 'root';
@@ -45,8 +25,7 @@ class Chat
         \PDO::ATTR_EMULATE_PREPARES => false,
     ];
 
-    // dnp PDO the future is PDO -- use this now
-    public function connectPDO()
+    public function __construct()
     {
         $dsn = "mysql:host={$this->host};dbname={$this->db};charset={$this->charset};port={$this->port}";
         try {
@@ -54,18 +33,11 @@ class Chat
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage(), (int) $e->getCode());
         }
-
-        //$this->getUserDetailsPDO(1);
     }
 
     // get data on one user = userid
     public function getUserDetailsPDO($userid)
     {
-        // $sqlQuery = "
-        //     SELECT * FROM " . $this->chatUsersTable . "
-        //     WHERE userid = '$userid'";
-        // return $this->getData($sqlQuery);
-
         // select a particular user by id
         $sql = "SELECT *
                 FROM {$this->chatUsersTable}
@@ -93,160 +65,154 @@ class Chat
 
     ////////////////////////////////////////////////// end PDO
 
-    // db connection
-    private function getData($sqlQuery)
-    {
 
-        $result = mysqli_query($this->dbConnect, $sqlQuery);
-        if (!$result) {
-            die('Error in query: ' . mysqli_error($this->dbConnect));
-        }
-        $data = array();
-        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            $data[] = $row;
-        }
-        return $data;
-    }
-
-    // helper for unread message count
-    private function getNumRows($sqlQuery)
-    {
-        $result = mysqli_query($this->dbConnect, $sqlQuery);
-        if (!$result) {
-            die('Error in query: ' . mysqli_error($this->dbConnect));
-        }
-        $numRows = mysqli_num_rows($result);
-        return $numRows;
-    }
-
-    // login local user based on username and password
+    // dnp PDO login local user based on username and password
     public function loginUsers($username, $password)
     {
-        $sqlQuery = "
-			SELECT userid, username
-			FROM " . $this->chatUsersTable . "
-			WHERE username='" . $username . "' AND password='" . $password . "'";
-        return $this->getData($sqlQuery);
+        $sql = "SELECT userid, username
+			        FROM {$this->chatUsersTable}
+                    WHERE username= :username 
+                    AND password= :password";
+        $data = [
+            'username' => $username,
+            'password' => $password
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
-    // get list of all users in the database
+    // PDO get list of all users in the database
     public function chatUsers($userid)
     {
-        $sqlQuery = "
-			SELECT * FROM " . $this->chatUsersTable . "
-			WHERE userid != '$userid'";
-        return $this->getData($sqlQuery);
+        $sql = "SELECT *
+			        FROM {$this->chatUsersTable}
+                    WHERE userid != :userid";
+        $data = [
+            'userid' => $userid,
+
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
-    // get data on one user = userid
+    // PDO get data on one user = userid
     public function getUserDetails($userid)
     {
-        $sqlQuery = "
-			SELECT * FROM " . $this->chatUsersTable . "
-			WHERE userid = '$userid'";
-        return $this->getData($sqlQuery);
+        $sql = "SELECT *
+			        FROM {$this->chatUsersTable}
+                    WHERE userid = :userid";
+        $data = [
+            'userid' => $userid,
+
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
-    // get user name where user = userid
+    // PDO get username where user = userid
     public function getUserName($userid)
     {
-        $userDetails = $this->getUserDetails($userid);
-        $userName = "";
-        foreach ($userDetails as $user) {
-            $userName = $user['username'];
-        }
-        return $userName;
+        $sql = "SELECT username
+			        FROM {$this->chatUsersTable}
+                    WHERE userid = :userid";
+        $data = [
+            'userid' => $userid,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchColumn();
+        return $result;
     }
 
-    // get avatar where user = userid
+    // PDO get avatar where user = userid
     public function getUserAvatar($userid)
     {
-        $sqlQuery = "
-			SELECT avatar
-			FROM " . $this->chatUsersTable . "
-			WHERE userid = '$userid'";
-        $userResult = $this->getData($sqlQuery);
-        $userAvatar = '';
-        foreach ($userResult as $user) {
-            $userAvatar = $user['avatar'];
-        }
-        return $userAvatar;
+        $sql = "SELECT avatar
+			        FROM {$this->chatUsersTable}
+                    WHERE userid = :userid";
+        $data = [
+            'userid' => $userid,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchColumn();
+        return $result;
     }
 
-    // set user online status userid
+    // dnp PDO save typing status
     public function updateUserOnline($userId, $online)
     {
-        $sqlUserUpdate = "
-			UPDATE " . $this->chatUsersTable . "
-			SET online = '" . $online . "'
-			WHERE userid = '" . $userId . "'";
-        mysqli_query($this->dbConnect, $sqlUserUpdate);
+        $sql = "UPDATE {$this->chatUsersTable}
+			    SET online = :online
+                WHERE userid = :userid";
+
+        $data = [
+            'online' => $online,
+            'userid' => $userId,
+        ];
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
     }
 
-    // set a new message in the db based on loggeduser and touser
+    // PDO set a new message in the db based on loggeduser and touser
     public function insertChat($reciever_userid, $user_id, $chat_message, $hash_in)
     {
-        $sqlInsert = "
-			INSERT INTO " . $this->chatTable . "
-			(reciever_userid, sender_userid, message, status)
-			VALUES ('" . $reciever_userid . "', '" . $user_id . "', '" . $chat_message . "', '1')";
-        $result = mysqli_query($this->dbConnect, $sqlInsert);
-        //error_log('inserted into sql chatTable, reciever_userid='.$sqlInsert);
-        //error_log('this->dbConnect= '. $this->dbConnect);
-        // error_log('result= '.$result);
-        // error_log('sql error = ' .mysqli_connect_error());
-        // error_log('Error in query: '. mysqli_error($this->dbConnect));
+        $sql = "INSERT INTO {$this->chatTable}
+               (reciever_userid, sender_userid, message, status)
+                VALUES (:reciever_userid, :sender_userid, :message, :status)";
 
-        if (!$result) {
-            //error_log('bad result '. mysqli_error($this->dbConnect));
-            //error_log('sql error = ' .mysqli_connect_error());
-            //error_log('Error in query: '. mysqli_error($this->dbConnect));
+        $data = [
+            'reciever_userid' => $reciever_userid,
+            'sender_userid' => $user_id,
+            'message' => $chat_message,
+            'status' => '1',
+        ];
 
-            return ('Error in query: ' . mysqli_error($this->dbConnect));
-        } else {
-            //error_log('good result');
-            $result = $this->getUserChat($user_id, $reciever_userid, $hash_in);
-            $conversation = $result['conversation'];
-            $hash = $result['hash'];
-            $data = array(
-                "conversation" => $conversation,
-                "hash" => $hash,
-            );
-            echo json_encode($data);
-        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+
+        $result = $this->getUserChat($user_id, $reciever_userid, $hash_in);
+        echo json_encode($result);
     }
 
-    // dnp get last conversation date for loggeduser and touser
-    public function getUsersLastConversationDate($from_user_id, $to_user_id)
+    // PDO get all conversations for loggeduser and touser
+    public function getChatData($from_userId, $to_userId)
     {
-        $sqlQuery = "
-					SELECT * FROM " . $this->chatTable . "
-					WHERE (sender_userid = '" . $from_user_id . "'
-					AND reciever_userid = '" . $to_user_id . "')
-					OR (sender_userid = '" . $to_user_id . "'
-					AND reciever_userid = '" . $from_user_id . "')
-					ORDER BY timestamp DESC LIMIT 1";
-        $result = $this->getData($sqlQuery);
-        foreach ($result as $row) {
-            return $row['timestamp'];
-        }
+        $sql = "SELECT *
+			        FROM {$this->chatTable}
+                    WHERE (sender_userid = :sender_userid
+                    AND reciever_userid = :reciever_userid)
+                    OR (sender_userid = :sender_userid2
+                    AND reciever_userid = :reciever_userid2)
+                    ORDER BY timestamp ASC";
+
+        $data = [
+            'sender_userid' => $from_userId,
+            'reciever_userid' => $to_userId,
+            'sender_userid2' => $to_userId,
+            'reciever_userid2' => $from_userId,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchAll();
+        return $result;
     }
 
-    // dnp get last message for loggeduser and touser
-    public function getUsersLastMessage($from_user_id, $to_user_id)
-    {
-        $sqlQuery = "
-					SELECT * FROM " . $this->chatTable . "
-					WHERE (sender_userid = '" . $from_user_id . "'
-					AND reciever_userid = '" . $to_user_id . "')
-					OR (sender_userid = '" . $to_user_id . "'
-					AND reciever_userid = '" . $from_user_id . "')
-					ORDER BY timestamp DESC LIMIT 1";
-        $result = $this->getData($sqlQuery);
-        foreach ($result as $row) {
-            return $row['message'];
-        }
-    }
 
     // get conversation and format with html for display on web page
     public function getUserChat($from_user_id, $to_user_id, $hash_in)
@@ -257,14 +223,8 @@ class Chat
         $fromUserName = $this->getUserName($from_user_id);
         $toUserName = $this->getUserName($to_user_id);
 
-        $sqlQuery = "
-			SELECT * FROM " . $this->chatTable . "
-			WHERE (sender_userid = '" . $from_user_id . "'
-			AND reciever_userid = '" . $to_user_id . "')
-			OR (sender_userid = '" . $to_user_id . "'
-			AND reciever_userid = '" . $from_user_id . "')
-			ORDER BY timestamp ASC";
-        $userChat = $this->getData($sqlQuery);
+        $userChat = $this->getChatData($from_user_id, $to_user_id);
+
         //dnp
         $conversation = '<ul class="chat">';
         foreach ($userChat as $chat) {
@@ -338,19 +298,9 @@ class Chat
         // dnp hash
         $hash = $result['hash'];
 
-        // update chat user read status
-        $sqlUpdate = "
-			UPDATE " . $this->chatTable . "
-			SET status = '0'
-			WHERE sender_userid = '" . $to_user_id . "' AND reciever_userid = '" . $from_user_id . "' AND status = '1'";
-        mysqli_query($this->dbConnect, $sqlUpdate);
+        $this->updateChatStatus($to_user_id, $from_user_id);
 
-        // update users current chat session, so... current_session is buddy_id
-        $sqlUserUpdate = "
-			UPDATE " . $this->chatUsersTable . "
-			SET current_session = '" . $to_user_id . "'
-			WHERE userid = '" . $from_user_id . "'";
-        mysqli_query($this->dbConnect, $sqlUserUpdate);
+        $this->updateCurrentSession($to_user_id, $from_user_id);
 
         // prepare to return html formated text to web page
         $data = array(
@@ -361,78 +311,112 @@ class Chat
         echo json_encode($data); // return json encoded array with html formated text
     }
 
-    // get unread message count for user and buddy
-    public function getUnreadMessageCount($senderUserid, $recieverUserid)
+    public function updateChatStatus($to_user_id, $from_user_id)
     {
-        $sqlQuery = "
-			SELECT * FROM " . $this->chatTable . "
-			WHERE sender_userid = '$senderUserid' AND reciever_userid = '$recieverUserid' AND status = '1'";
-        $numRows = $this->getNumRows($sqlQuery);
-        $output = '';
-        if ($numRows > 0) {
-            $output = $numRows;
-        }
-        return $output;
+
+        $sql = "UPDATE {$this->chatTable}
+			    SET status = '0'
+                WHERE sender_userid = :sender_userid
+                AND reciever_userid = :reciever_userid
+                AND status = '1'";
+
+        $data = [
+            'sender_userid' => $to_user_id,
+            'reciever_userid' => $from_user_id,
+        ];
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
     }
 
-    // dnp PDO set/update typing status
-    // public function updateTypingStatus($is_type, $loginDetailsId, $buddyId)
-    // {
-    //     $sql = "UPDATE {$this->chatLoginDetailsTable}
-    // 		    SET is_typing = :is_typing,
-    //                 buddy_id = :buddy_id
-    //             WHERE id = :id";
+    public function updateCurrentSession($to_user_id, $from_user_id)
+    {
 
-    //     $data = [
-    //         'is_typing' => $is_type,
-    //         'buddy_id' => $buddyId,
-    //         'id' => $loginDetailsId,
-    //     ];
-    //     $stmt = $this->pdo->prepare($sql);
-    //     $stmt->execute($data);
-    // }
+        $sql = "UPDATE {$this->chatUsersTable}
+			    SET current_session = :current_session
+                WHERE userid = :userid
+                ";
 
-    // dnp PDO get typing status for buddy to see if they are typing to loggedUser
-    // public function fetchIsTypeStatus($loggedUserId, $buddyId)
-    // {
-    //     $sql = "SELECT is_typing, buddy_id FROM {$this->chatLoginDetailsTable}
-    //             WHERE userid = :userid AND buddy_id = :buddy_id
-    //             ORDER BY last_activity DESC LIMIT 1";
-    //     $data = [
-    //         'userid' => $loggedUserId,
-    //         'buddy_id' => $buddyId,
-    //     ];
-    //     $stmt = $this->pdo->prepare($sql);
-    //     $stmt->execute($data);
+        $data = [
+            'current_session' => $to_user_id,
+            'userid' => $from_user_id,
+        ];
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
 
-    //     $result = $stmt->fetchAll();
-    //     // go through all the returned rows
-    //     $output = '';
-    //     foreach ($result as $row) {
-    //         $is_typing = $row['is_typing'];
-    //         //error_log("is_typing= $is_typing");
-    //         if ($is_typing == 'yes') {
-    //             $output = 'Typing';
-    //         }
-    //     }
-    //     return $output;
-    // }
 
-    // get typing status
-    // public function fetchIsTypeStatus2($userId, $buddyId)
-    // {
-    //     $sqlQuery = "
-    // 	SELECT is_typing, buddy_id FROM " . $this->chatLoginDetailsTable . "
-    // 	WHERE userid = '" . $userId . "' ORDER BY last_activity DESC LIMIT 1";
-    //     $result = $this->getData($sqlQuery);
-    //     $output = '';
-    //     foreach ($result as $row) {
-    //         if ($row["is_typing"] == 'yes' and $row["buddy_id"] == $buddyId) {
-    //             $output = 'Typing';
-    //         }
-    //     }
-    //     return $output;
-    // }
+    // PDO get last conversation date for loggeduser and touser
+    public function getUsersLastConversationDate($from_userId, $to_userId)
+    {
+        $sql = "SELECT timestamp
+			        FROM {$this->chatTable}
+                    WHERE (sender_userid = :sender_userid
+                    AND reciever_userid = :reciever_userid)
+                    OR (sender_userid = :sender_userid2
+                    AND reciever_userid = :reciever_userid2)
+                    ORDER BY timestamp DESC LIMIT 1";
+
+        $data = [
+            'sender_userid' => $from_userId,
+            'reciever_userid' => $to_userId,
+            'sender_userid2' => $to_userId,
+            'reciever_userid2' => $from_userId,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchColumn();
+        return $result;
+    }
+
+    // PDO get last conversation date for loggeduser and touser
+    public function getUsersLastMessage($from_userId, $to_userId)
+    {
+        $sql = "SELECT message
+			        FROM {$this->chatTable}
+                    WHERE (sender_userid = :sender_userid
+                    AND reciever_userid = :reciever_userid)
+                    OR (sender_userid = :sender_userid2
+                    AND reciever_userid = :reciever_userid2)
+                    ORDER BY timestamp DESC LIMIT 1";
+
+        $data = [
+            'sender_userid' => $from_userId,
+            'reciever_userid' => $to_userId,
+            'sender_userid2' => $to_userId,
+            'reciever_userid2' => $from_userId,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchColumn();
+        return $result;
+    }
+
+    public function getUnreadMessageCount($senderUserid, $recieverUserid)
+    {
+        $sql = "SELECT count(*)
+			        FROM {$this->chatTable}
+                    WHERE (sender_userid = :sender_userid
+                    AND reciever_userid = :reciever_userid)
+                    AND status = '1'";
+
+        $data = [
+            'sender_userid' => $senderUserid,
+            'reciever_userid' => $recieverUserid,
+        ];
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        $result = $stmt->fetchColumn();
+        if ($result == '0') {
+            $result = '';
+        }
+        return $result;
+    }
+
+
+
 
     // dnp PDO insert login status
     public function insertUserLoginDetails($userId)
@@ -452,20 +436,6 @@ class Chat
         return $lastInsertId;
     }
 
-    // set/update login status
-    // public function insertUserLoginDetails2($userId)
-    // {
-    //     $sqlInsert = "
-    // 		NSERT INTO " . $this->chatLoginDetailsTable . " (userid)
-    // 		VALUES ('" . $userId . "')";
-    //     //error_log('insert sql= ' . $sqlInsert);
-
-    //     mysqli_query($this->dbConnect, $sqlInsert);
-    //     $lastInsertId = mysqli_insert_id($this->dbConnect);
-    //     // PDO $id = $db->pdo->lastInsertId();
-    //     return $lastInsertId;
-    // }
-
     // dnp PDO set last activity time for user
     public function updateLastActivity($loginDetailsId)
     {
@@ -482,15 +452,7 @@ class Chat
         $stmt->execute($data);
     }
 
-    // set last activity time for user
-    // public function updateLastActivity2($loginDetailsId)
-    // {
-    //     $sqlUpdate = "
-    // 		UPDATE " . $this->chatLoginDetailsTable . "
-    // 		SET last_activity = now()
-    // 		WHERE id = '" . $loginDetailsId . "'";
-    //     mysqli_query($this->dbConnect, $sqlUpdate);
-    // }
+
     // dnp PDO set last activity time for user
     public function getUserLastActivity($userId)
     {
@@ -513,22 +475,10 @@ class Chat
         }
     }
 
-    // get last activity time for user
-    // public function getUserLastActivity2($userId)
-    // {
-    //     $sqlQuery = "
-    // 		SELECT last_activity FROM " . $this->chatLoginDetailsTable . "
-    // 		WHERE userid = '$userId' ORDER BY last_activity DESC LIMIT 1";
-    //     $result = $this->getData($sqlQuery);
-    //     foreach ($result as $row) {
-    //         return $row['last_activity'];
-    //     }
-    // }
 
     // get all details for contact list
     public function getContactListDetailsGood($loggedInUserId)
     {
-
         $loggedUser = $this->getUserDetails($_SESSION['userid']);
         $currentSession = '';
         $loggedUserName = '';
@@ -620,12 +570,12 @@ class Chat
     public function getContactListDetails($loggedInUserId)
     {
 
-        echo $this->getContactListDetails2($loggedInUserId);
+        echo $this->getContactListDetailsOne($loggedInUserId);
     }
 
     // get all details for contact list
     // called everytime contact list is openend
-    public function getContactListDetails2($loggedInUserId)
+    public function getContactListDetailsOne($loggedInUserId)
     {
 
         $loggedUser = $this->getUserDetails($_SESSION['userid']);
@@ -760,6 +710,7 @@ class Chat
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($data);
     }
+
     // dnp PDO get typing status for buddy to see if they are typing to loggedUser
     public function loadTypingStatus($loggedUserId, $buddyId)
     {
