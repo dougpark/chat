@@ -1,5 +1,18 @@
 <!doctype html>
 <html lang="en">
+<!-- Based on -->
+<!-- https://www.phpzag.com/build-live-chat-system-with-ajax-php-mysql/ -->
+<!-- May 2020 -->
+<!-- 
+Updated:
+Bootstrap 4
+jquery 3.5.1
+fontawesome
+PHP PDO 
+style.css
+UUID login
+-->
+
 
 <head>
     <!-- Required meta tags -->

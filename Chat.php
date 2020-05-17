@@ -7,6 +7,7 @@ class Chat
     private $user = 'phpzag_demo';
     private $password = "123";
     private $database = "phpzag_demo";
+    
     private $chatTable = 'chat';
     private $chatUsersTable = 'chat_users';
     private $chatLoginDetailsTable = 'chat_login_details';
