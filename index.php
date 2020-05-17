@@ -40,17 +40,23 @@ include 'header.php';
                 <!-- open contacts modal panel -->
                 <a class="nav-link d-flex align-items-center " id="showContacts" href="#contactsPanel" data-toggle="modal" onclick="getContactListDetails();">
                     <span class="text-light fas fa-user-friends"></span>
-                </a>
-
-                <a class="navbar-brand" href="#">
+                    <span class="pb-4">
+                        <span id="unreadMsgTotal" class="badge badge-pill badge-danger "></span>
+                    </span>
+                </a> <a class="navbar-brand pl-5" href="#">
                     <div id="userSection">
                         <span class="pl-5 fas fa-comment"></span> Chat
                     </div>
+                </a>
+                <a class="nav-link ml-auto mr-1" href="#settingsPanel" data-toggle="modal">
+                    <span class="text-light fas fa-cog"></span>
+
                 </a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <!-- main_nav -->
                 <div class="collapse navbar-collapse" id="main_nav">
 
@@ -116,8 +122,7 @@ include 'header.php';
                         <div class="modal-body dnp-modal">
                             <!-- contact list generated from php code  -->
                             <div id="contactlist" class="  text-dark pt-1 pl-1">
-                                <!-- put div here -->
-                                <!-- move this to js so can update everytime user opens contacts list -->
+                                <!-- also filled from js when user opens contacts page -->
                                 <?php $chat->getContactListDetails($_SESSION['userid']); ?>
                             </div>
                         </div>
@@ -130,6 +135,47 @@ include 'header.php';
                 </div>
             </div>
             <!-- end Contacts modal panel -->
+
+            <!-- settings panel -->
+            <div id="settingsPanel" class="modal " tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="xmodal-content ">
+
+                        <div class="card text-light bg-dark border-primary">
+                            <div class="card-header border-primary">
+                                Settings
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="card-title">Title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+
+
+                                <ul class="list-group list-group-flush text-white bg-dark">
+                                    <li class="list-group-item text-white bg-dark">Cras justo odio</li>
+                                    <li class="list-group-item text-white bg-dark">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item text-white bg-dark">Vestibulum at eros</li>
+                                    <li class="list-group-item text-white bg-dark">Cras justo odio</li>
+                                    <li class="list-group-item text-white bg-dark">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item text-white bg-dark">Vestibulum at eros</li>
+                                    <li class="list-group-item text-white bg-dark">Cras justo odio</li>
+                                    <li class="list-group-item text-white bg-dark">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item text-white bg-dark">Vestibulum at eros</li>
+                                    <li class="list-group-item text-white bg-dark">Vestibulum at eros</li>
+                                </ul>
+                            </div>
+
+                            <div class="card-footer text-muted text-right">
+                                <a href="#" class="btn text-white bg-dark border-secondary btn-block">Done</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end settingsPanel -->
+
 
             <div id="right-container" class="container">
                 <div class="row justify-content-center">
@@ -235,6 +281,37 @@ include 'header.php';
             if ($this.hasClass(fadeIn)) {
                 $this.removeClass(fadeIn);
                 $this.addClass(fadeOut);
+                e.preventDefault();
+
+                setTimeout(function() {
+                    $this.modal('hide');
+                }, 395); // the default delays from animate.css is 1s
+            }
+        });
+    </script>
+    <script>
+        // https://stackoverflow.com/questions/48851109/animate-css-on-bootstrap-4-modal
+        // Different effects for showing and closing modal
+        let fadeInR = 'dnp-animate-right';
+        let fadeOutR = 'dnp-animate-right-out';
+
+        // On show
+        $('#settingsPanel').on('show.bs.modal', function() {
+            $(this).removeClass(fadeOutR);
+            $(this).addClass(fadeInR);
+        });
+
+        // On closing
+        $('#settingsPanel').on('hide.bs.modal', function(e) {
+            let $this = $(this);
+
+            // Check whether the fade in class still exists in this modal
+            // if this class is still exists prevent this modal
+            // to close immediately by setting up timeout, and replace
+            // the fade in class with fade out class.
+            if ($this.hasClass(fadeInR)) {
+                $this.removeClass(fadeInR);
+                $this.addClass(fadeOutR);
                 e.preventDefault();
 
                 setTimeout(function() {

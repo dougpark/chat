@@ -56,8 +56,9 @@ $(document).ready(function () {
 
 	// check for new users every 6 seconds
 	setInterval(function () {
-		updateUserList();
-		updateUnreadMessageCount();
+		//updateUserList();
+		//updateUnreadMessageCount();
+		getContactListDetails();
 	}, 60000);
 
 	// check for updates every .5 seconds
@@ -84,7 +85,7 @@ $(document).ready(function () {
 
 	// hmmm
 	$(document).on("click", '#status-options ul li', function (event) {
-		$("#profile-img").removeClass();
+		$("#profile-img").removeClass(); // should add array of classes to remove...online, away, busy, offline
 		$("#status-online").removeClass("active");
 		$("#status-away").removeClass("active");
 		$("#status-busy").removeClass("active");
@@ -99,7 +100,7 @@ $(document).ready(function () {
 		} else if ($("#status-offline").hasClass("active")) {
 			$("#profile-img").addClass("offline");
 		} else {
-			$("#profile-img").removeClass();
+			$("#profile-img").removeClass(); // should add array of classes to remove...online, away, busy, offline
 		};
 		$("#status-options").removeClass("active");
 	});
@@ -353,6 +354,7 @@ function loadTypingStatus(loggedUserId, buddyId) {
 }
 
 // get user list from server -- seems to only update the status of users
+// 1 = online, 0 = offline
 function updateUserList() {
 	$.ajax({
 		url: "chat_action.php",
@@ -544,41 +546,27 @@ function showTypingStatus() {
 
 	//dnp test
 	//const user_data = $('#user_data')[0];
-	const un = getUserData('loggedusername');
-	const ui = getUserData('loggeduserid');
-	const tu = getUserData('touserid');
-	const tn = getUserData('tousername');
-	setUserData({
-		attr: 'test',
-		value: 'doug'
-	});
-	const test = getUserData('hey');
+	// const un = getUserData('loggedusername');
+	// const ui = getUserData('loggeduserid');
+	// const tu = getUserData('touserid');
+	// const tn = getUserData('tousername');
+	// setUserData({
+	// 	attr: 'test',
+	// 	value: 'doug'
+	// });
+	// const test = getUserData('hey');
+
+	loadTypingStatus(ds.loggedUserId, ds.toUserId);
+
+	// $('li.contact.active').each(function () {
+	// 	var to_user_id = $(this).attr('data-touserid');
+	// 	const tu = getUserData('loggeduserid');
+
+	// 	// dnp get status of typing
 
 
-	$('li.contact.active').each(function () {
-		var to_user_id = $(this).attr('data-touserid');
-		const tu = getUserData('loggeduserid');
 
-		// dnp test get status of typing
-		loadTypingStatus(ds.loggedUserId, ds.toUserId);
-
-		// disable the original way to get typing status
-		// $.ajax({
-		// 	url: "chat_action.php",
-		// 	method: "POST",
-		// 	data: {
-		// 		to_user_id: to_user_id,
-		// 		buddy_id: tu,
-		// 		action: 'show_typing_status'
-		// 	},
-		// 	dataType: "json",
-		// 	success: function (response) {
-		// 		$('#isTyping').html(response.message);
-		// 		// + to_user_id	
-
-		// 	}
-		// });
-	});
+	// });
 }
 
 // get contactlist everytime the modal dialog is opened
@@ -592,7 +580,14 @@ function getContactListDetails() {
 		},
 		dataType: "json",
 		success: function (response) {
-			$('#contactlist').html(response);
+			// get contactList from the array
+			let contactList = response.contactList;
+			let unreadMsgTotal = response.unreadMsgTotal;
+			console.log(unreadMsgTotal);
+			$('#contactlist').html(contactList);
+			if (unreadMsgTotal > 0) {
+				$('#unreadMsgTotal').html(unreadMsgTotal);
+			}
 
 		}
 

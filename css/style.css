@@ -48,7 +48,7 @@
 
 
 .dnp-message-footer {
-    
+
     height: 100px;
 }
 
@@ -137,6 +137,43 @@
         opacity: 0;
     }
 }
+
+/* ***************** */
+.dnp-animate-right {
+    xposition: relative;
+    animation: animateright 0.4s;
+}
+
+.dnp-animate-right-out {
+    xposition: relative;
+    animation: animateright-out 0.4s;
+}
+
+@keyframes animateright {
+    from {
+        left: 600px;
+        opacity: 0;
+    }
+
+    to {
+        left: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes animateright-out {
+    from {
+        left: 0;
+        opacity: 1;
+    }
+
+    to {
+        left: 600px;
+        opacity: 0;
+    }
+}
+
+/* ***************** */
 
 /* Full screen Modal */
 .dnp-fullscreen-modal .modal-dialog {

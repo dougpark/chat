@@ -89,8 +89,8 @@ if ($_POST['action'] == 'load_typing_status') {
     echo json_encode($data);
 }
 
-// get html formated contacts list
+// get data array with html formated contacts list and unreadMsgTotal
 if ($_POST['action'] == 'get_contact_list_details') {
-    $message = $chat->getContactListDetailsOne($_SESSION['userid']);
-    echo json_encode($message);
+    $data = $chat->getContactListDetailsOne($_SESSION['userid']);
+    echo json_encode($data);
 }

@@ -153,7 +153,7 @@ class Chat
         return $result;
     }
 
-    // dnp PDO save typing status
+    // dnp PDO save online status
     public function updateUserOnline($userId, $online)
     {
         $sql = "UPDATE {$this->chatUsersTable}
@@ -311,6 +311,7 @@ class Chat
         echo json_encode($data); // return json encoded array with html formated text
     }
 
+    // reset status flag for unread message count
     public function updateChatStatus($to_user_id, $from_user_id)
     {
 
@@ -393,6 +394,7 @@ class Chat
         return $result;
     }
 
+    // check the status flag for unread message count
     public function getUnreadMessageCount($senderUserid, $recieverUserid)
     {
         $sql = "SELECT count(*)
@@ -414,9 +416,6 @@ class Chat
         }
         return $result;
     }
-
-
-
 
     // dnp PDO insert login status
     public function insertUserLoginDetails($userId)
@@ -477,7 +476,7 @@ class Chat
 
 
     // get all details for contact list
-    public function getContactListDetailsGood($loggedInUserId)
+    public function xetContactListDetailsGood($loggedInUserId)
     {
         $loggedUser = $this->getUserDetails($_SESSION['userid']);
         $currentSession = '';
@@ -566,11 +565,13 @@ class Chat
     }
 
     // get all details for contact list
-    // called on initial load
+    // called on initial load from index.php must return html formated text
     public function getContactListDetails($loggedInUserId)
     {
 
-        echo $this->getContactListDetailsOne($loggedInUserId);
+        $data =  $this->getContactListDetailsOne($loggedInUserId);
+        echo $data['contactList'];
+        
     }
 
     // get all details for contact list
@@ -605,6 +606,7 @@ class Chat
         //$out = '';
         $out .= '<ul class="contacts">';
         $chatUsers = $this->chatUsers($_SESSION['userid']);
+        $unreadMsgTotal = 0;
         foreach ($chatUsers as $user) {
             $status = 'offline';
             if ($user['online']) {
@@ -618,6 +620,8 @@ class Chat
             }
             $lastActivity = $this->getUsersLastConversationDate($_SESSION['userid'], $user['userid']);
             $lastMessage = $this->getUsersLastMessage($_SESSION['userid'], $user['userid']);
+            $unreadMsgCount = $this->getUnreadMessageCount($user['userid'], $_SESSION['userid']);
+            $unreadMsgTotal = $unreadMsgTotal + $unreadMsgCount;
 
             //$lastActivity = $chat->getUserLastActivity($user['userid']);
 
@@ -639,7 +643,7 @@ class Chat
             $out .= '<strong class="primary-font">' . $user['username'] . '</strong>';
 
             // contact un-read message count
-            $out .= '<span id="unread_' . $user['userid'] . '" class="badge badge-pill badge-danger"  >' . $this->getUnreadMessageCount($user['userid'], $_SESSION['userid']) . '</span>';
+            $out .= '<span id="unread_' . $user['userid'] . '" class="badge badge-pill badge-danger"  >' . $unreadMsgCount . '</span>';
 
             // contact is typing
             $out .= '<small class="float-right text-dark"><span id="xisTyping_' . $user['userid'] . '" class="isTyping"></span></small>';
@@ -661,7 +665,14 @@ class Chat
         }
         $out .= '</ul>';
 
-        return $out;
+        // make array here with $out and $unreadMsgTotal
+        // contactList
+        // unreadMsgTotal
+        $data = [
+            'contactList' => $out,
+            'unreadMsgTotal' => $unreadMsgTotal,
+        ];
+        return $data;
     }
 
     // dnp PDO save buddyID
