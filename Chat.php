@@ -1,5 +1,5 @@
 <?php
-//include 'UUID.php';
+include 'Parsedown.php';
 
 class Chat
 {
@@ -7,7 +7,7 @@ class Chat
     private $user = 'phpzag_demo';
     private $password = "123";
     private $database = "phpzag_demo";
-    
+
     private $chatTable = 'chat';
     private $chatUsersTable = 'chat_users';
     private $chatLoginDetailsTable = 'chat_login_details';
@@ -26,6 +26,9 @@ class Chat
         \PDO::ATTR_EMULATE_PREPARES => false,
     ];
 
+    // https://github.com/erusev/parsedown
+    private $Parsedown;
+
     public function __construct()
     {
         $dsn = "mysql:host={$this->host};dbname={$this->db};charset={$this->charset};port={$this->port}";
@@ -34,6 +37,8 @@ class Chat
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage(), (int) $e->getCode());
         }
+
+        $this->Parsedown = new Parsedown();
     }
 
     // get data on one user = userid
@@ -257,8 +262,10 @@ class Chat
                 $conversation .= '  </div>';
             }
 
-            // message text
-            $conversation .= '  <p>' . $chat["message"] . '</p>';
+            // convert markdown to html
+            $msg = $this->Parsedown->text($chat["message"]);
+
+            $conversation .= '  <p>' . $msg . '</p>';
             $conversation .= ' </div>';
             $conversation .= '</li>';
         }
@@ -572,7 +579,6 @@ class Chat
 
         $data =  $this->getContactListDetailsOne($loggedInUserId);
         echo $data['contactList'];
-        
     }
 
     // get all details for contact list
