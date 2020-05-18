@@ -6,10 +6,10 @@ A mobile first browser based chat application using PHP, Ajax and Javascript alo
 Now supports Markdown with [Parsedown](https://github.com/erusev/parsedown)
 
 ## PHP
-Tested on PHP 7.3.8
+Tested on [PHP](https://www.php.net) 7.3.8
 
 ## Database
-Tested on MySQL 5.7.26
+Tested on [MySQL](https://dev.mysql.com/downloads/mysql/) 5.7.26
 
 ### Create the table structure
 
@@ -70,6 +70,6 @@ chat.js
 
 ## Acknowledgements
 
->Based on the chat tutorial by [PHPZag]( https://www.phpzag.com/build-live-chat-system-with-ajax-php-mysql/
+Based on the chat tutorial by [PHPZag]( https://www.phpzag.com/build-live-chat-system-with-ajax-php-mysql/
 )
 
