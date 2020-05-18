@@ -11,7 +11,9 @@ if (!isset($_COOKIE[$cookie_name])) {
 	// cookie already set
 	// get login info from DB here
 	$user = $chat->loginWithUUID($_COOKIE[$cookie_name]);
-	loginUser($user);
+	if ($user) {
+		loginUser($user);
+	}
 }
 
 // called with valid user object

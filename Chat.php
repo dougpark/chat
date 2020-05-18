@@ -4,20 +4,16 @@ include 'Parsedown.php';
 class Chat
 {
     private $host = 'localhost';
-    private $user = 'phpzag_demo';
-    private $password = "123";
-    private $database = "phpzag_demo";
+    private $db = 'chat';
+    private $user = 'chatadmin';
+    private $pass = '123';
+    private $port = "3306";
+    private $charset = 'utf8';
 
     private $chatTable = 'chat';
     private $chatUsersTable = 'chat_users';
     private $chatLoginDetailsTable = 'chat_login_details';
 
-    //private $host = '127.0.0.1';
-    private $db = 'phpzag_demo';
-    //private $user = 'root';
-    private $pass = '123';
-    private $port = "3306";
-    private $charset = 'utf8';
     private $pdo = '';
 
     private $options = [
@@ -628,7 +624,9 @@ class Chat
             $lastActivity = $this->getUsersLastConversationDate($_SESSION['userid'], $user['userid']);
             $lastMessage = $this->getUsersLastMessage($_SESSION['userid'], $user['userid']);
             $unreadMsgCount = $this->getUnreadMessageCount($user['userid'], $_SESSION['userid']);
-            $unreadMsgTotal = $unreadMsgTotal + $unreadMsgCount;
+            if ($unreadMsgCount) {
+                $unreadMsgTotal = $unreadMsgTotal + $unreadMsgCount;
+            }
 
             //$lastActivity = $chat->getUserLastActivity($user['userid']);
 

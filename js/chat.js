@@ -461,6 +461,7 @@ function scrollPageToBottom() {
 
 // called when select a contact to show the messages with that contact by to_user_id
 function showUserChat(to_user_id) {
+
 	$.ajax({
 		url: "chat_action.php",
 		method: "POST",
@@ -474,18 +475,18 @@ function showUserChat(to_user_id) {
 			// dnp hash
 			let hash = response.hash;
 
-			// only update page if hash is new
-			if (hash != ds.conversationHash) {
-				// user info part
-				$('#userSection').html(response.userSection);
-				// message chat conversation part
-				$('#conversationSection').html(response.conversation);
-				// reset unread indicator
-				$('#unread_' + to_user_id).html('');
+			// selected a new contact, so don't check the hash, just update it.
 
-				scrollPageToBottom();
-				ds.conversationHash = hash;
-			}
+			// user info part
+			$('#userSection').html(response.userSection);
+			// message chat conversation part
+			$('#conversationSection').html(response.conversation);
+			// reset unread indicator
+			$('#unread_' + to_user_id).html('');
+
+			scrollPageToBottom();
+			ds.conversationHash = hash;
+
 		}
 	});
 }
@@ -583,7 +584,7 @@ function getContactListDetails() {
 			// get contactList from the array
 			let contactList = response.contactList;
 			let unreadMsgTotal = response.unreadMsgTotal;
-			console.log(unreadMsgTotal);
+			//console.log(unreadMsgTotal);
 			$('#contactlist').html(contactList);
 			if (unreadMsgTotal > 0) {
 				$('#unreadMsgTotal').html(unreadMsgTotal);

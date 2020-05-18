@@ -10,7 +10,8 @@ A mobile first browser based chat application using PHP, Ajax and Javascript alo
 - Markdown with [Parsedown](https://github.com/erusev/parsedown)
 - [jQuery](https://jquery.com) 3.5.1.
 - [Bootstrap](https://getbootstrap.com) 4.4.1
-- PHP [UUID](https://www.php.net/manual/en/function.uniqid.php#94959)
+- PHP [UUID](https://www.php.net/manual/en/function.uniqid.php#94959) Generates VALID RFC 4122 COMPLIANT
+- PHP [PDO](https://phpdelusions.net/pdo) The only proper PDO tutorial
 
 ### Create the table structure
 
