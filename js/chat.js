@@ -106,11 +106,12 @@ $(document).ready(function () {
 	});
 
 	// select a contact
+	// anytime a click happens on an element with class = contact
 	$(document).on('click', '.contact', function () {
 		$('.contact').removeClass('active');
 		$(this).addClass('active');
 		var to_user_id = $(this).data('touserid');
-		showUserChat(to_user_id);
+
 		$(".chatMessage").attr('id', 'chatMessage' + to_user_id);
 		$(".chatButton").attr('id', 'chatButton' + to_user_id);
 
@@ -128,6 +129,9 @@ $(document).ready(function () {
 			attr: "touserid",
 			value: to_user_id
 		});
+
+		// load new set of messsage here now that we have a new contact
+		showUserChat(to_user_id);
 
 	});
 
@@ -485,7 +489,7 @@ function showUserChat(to_user_id) {
 			$('#unread_' + to_user_id).html('');
 
 			scrollPageToBottom();
-			ds.conversationHash = hash;
+			ds.conversationHash = Math.random();
 
 		}
 	});

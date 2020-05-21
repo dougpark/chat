@@ -66,12 +66,12 @@ CREATE TABLE `chat_users` (
 --
 
 INSERT INTO `chat_users` (`userid`, `username`, `password`, `avatar`, `current_session`, `online`, `is_typing`, `buddy_id`, `login_uuid`) VALUES
-(1, 'Rose', '123', 'user1.jpg', 5, 0, 'no', 5, ''),
-(2, 'Smith', '123', 'user2.jpg', 3, 1, 'no', 3, 'c8af214e-ef20-4f38-8d8a-e6ee958fe524'),
-(3, 'Adam', '123', 'user3.jpg', 2, 1, 'no', 2, '596981b2-8638-4319-a371-fcc395efdcd5'),
-(4, 'March', '123', 'user4.jpg', 1, 1, 'no', 1, 'b939bcd5-07d8-404a-ad4b-6eb96f79daad'),
-(5, 'Katrina', '123', 'user5.jpg', 1, 0, 'no', 1, ''),
-(6, 'Rhodes', '123', 'user6.jpg', 1, 0, 'no', 1, '');
+(1, 'Rose', '123', 'user1.jpg', 0, 0, 'no', 0, ''),
+(2, 'Smith', '123', 'user2.jpg', 0, 0, 'no', 0, ''),
+(3, 'Adam', '123', 'user3.jpg', 0, 0, 'no', 0, ''),
+(4, 'March', '123', 'user4.jpg', 0, 0, 'no', 0, ''),
+(5, 'Katrina', '123', 'user5.jpg', 0, 0, 'no', 0, ''),
+(6, 'Rhodes', '123', 'user6.jpg', 0, 0, 'no', 0, '');
 
 --
 -- Indexes for dumped tables

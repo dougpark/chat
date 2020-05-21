@@ -1,5 +1,6 @@
 <?php
 include 'Parsedown.php';
+include 'DateCalc.php';
 
 class Chat
 {
@@ -227,10 +228,17 @@ class Chat
 
         $userChat = $this->getChatData($from_user_id, $to_user_id);
 
+        // used to calc relative time/dates
+        $dateCalc = new DateCalc();
+
         //dnp
         $conversation = '<ul class="chat">';
         foreach ($userChat as $chat) {
             $user_name = '';
+
+            // calc relative time/date here
+            $chatTime = $dateCalc->convert($chat['timestamp']);
+
             if ($chat["sender_userid"] == $to_user_id) {
                 // left side header
                 $conversation .= '<li class="left clearfix sent">';
@@ -242,7 +250,7 @@ class Chat
                 $conversation .= '  <div class="header">';
                 $conversation .= '   <strong class="primary-font">' . $toUserName . '</strong> <small';
                 $conversation .= '   class="float-right text-muted">';
-                $conversation .= '   <span class="far fa-clock"></span> ' . $chat['timestamp'] . '</small>';
+                $conversation .= '   <span class="far fa-clock"></span> ' . $chatTime . '</small>';
                 $conversation .= '  </div>';
             } else {
                 $conversation .= '<li class="replies right clearfix">';
@@ -254,7 +262,7 @@ class Chat
                 $conversation .= '  <div class="header">';
                 $conversation .= '   <strong class="float-right primary-font">' . $fromUserName . '</strong> <small';
                 $conversation .= '   class=" text-muted">';
-                $conversation .= '   <span class="far fa-clock"></span> ' . $chat['timestamp'] . '</small>';
+                $conversation .= '   <span class="far fa-clock"></span> ' . $chatTime . '</small>';
                 $conversation .= '  </div>';
             }
 
@@ -585,6 +593,7 @@ class Chat
         $loggedUser = $this->getUserDetails($_SESSION['userid']);
         $currentSession = '';
         $loggedUserName = '';
+        $out = '';
         foreach ($loggedUser as $user) {
             $currentSession = $user['current_session'];
             $loggedUserName = $user['username'];
@@ -639,7 +648,7 @@ class Chat
             $out .= '<img width="50px" height="50px" 25px, src="userpics/' . $user['avatar'] . '" alt="" class="rounded-circle float-left">';
             //echo "</span>";
 
-            // TBD contact on-line status
+            //  contact on-line status
             $out .= '<span id="status_' . $user['userid'] . '" class="float-left contact-status ' . $status . '"></span>';
 
             // contact name
