@@ -35,6 +35,8 @@ class DateCalc
     // DayOne
     // Mon, May 18, 2020, 10:03 AM CDT
 
+    // php formating options
+    // https://www.php.net/manual/en/dateinterval.format.php
 
     // get data on one user = userid
     public function convert($dateIn)
@@ -47,7 +49,7 @@ class DateCalc
         // calc days between dates at midnight
         $todayMidnight = Date_create()->setTime(0, 0, 0);
         $msgMidnight = DateTime::createFromFormat("Y-m-d H:i:s", $dateIn)->setTime(0, 0, 0);
-        $diff = $todayMidnight->diff($msgMidnight)->format("%d");
+        $diff = $todayMidnight->diff($msgMidnight)->format("%a");
 
         // determine when to print Today and Yesterday
         if ($diff == 0) {

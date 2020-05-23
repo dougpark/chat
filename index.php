@@ -178,6 +178,7 @@ include 'header.php';
 
 
             <div id="right-container" class="container">
+
                 <div class="row justify-content-center">
 
                     <!-- Right Column -->
