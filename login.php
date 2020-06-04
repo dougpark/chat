@@ -1,7 +1,7 @@
 <?php
 SESSION_START();
-include 'UUID.php';
-include 'Chat.php';
+include './UUID.php';
+include './Chat.php';
 $chat = new Chat();
 
 // check for remember-me cookie
